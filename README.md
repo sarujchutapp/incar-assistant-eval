@@ -34,3 +34,9 @@ Slices 1–4 are in place:
    McNemar on the paired objective quadrant (no Elo), and a report card.
 6. Chat quadrant (objective-by-construction) — verifiable-answer cases scored by
    faithfulness vs a provided fact, with answer relevancy reported.
+7. LLM-as-judge for the open chat tail — guarded pairwise judging (CoT critique,
+   length normalization, position swap, cross-family), Bradley-Terry with
+   bootstrap CIs, and rule-based Role Adherence to the fixed persona.
+
+Slices 8–9 (human-satisfaction validation anchor; case authoring at scale +
+recorded-fixtures demo run) are HITL and tracked on GitLab.

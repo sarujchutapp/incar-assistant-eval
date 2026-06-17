@@ -8,6 +8,7 @@ import json
 from .chat import ChatCase, run_chat_benchmark
 from .client import FakeModelClient
 from .dialogue import DialogueCase, Turn, run_dialogue
+from .judge import Comparison, bradley_terry_with_ci, role_adherence
 from .models import CarState, GoldRecord
 from .report import compare_tsr, format_report, model_report, run_models
 
@@ -82,6 +83,20 @@ def main() -> None:
     _, chat_metrics = run_chat_benchmark(chat_cases, chat_client)
     print(f"chat faithfulness: {chat_metrics.faithfulness_rate:.1%}   "
           f"relevancy: {chat_metrics.mean_relevancy:.2f}")
+
+    # Open-tail pairwise judging aggregates to a Bradley-Terry ranking (strong
+    # wins 6 of 8 head-to-heads, 1 tie from position bias).
+    comps = (
+        [Comparison("strong", "weak", "strong") for _ in range(6)]
+        + [Comparison("strong", "weak", "weak"), Comparison("strong", "weak", "tie")]
+    )
+    bt = bradley_terry_with_ci(["strong", "weak"], comps, n_boot=200, seed=0)
+    print("\nBradley-Terry (chat open tail):")
+    for name in ("strong", "weak"):
+        s = bt[name]
+        print(f"  {name:6} {s.value:.2f}  [{s.lo:.2f}, {s.hi:.2f}]")
+    print(f"role adherence - concise: {role_adherence('Your ETA is 25 minutes.'):.2f}   "
+          f"rambling: {role_adherence('By the way, ' + 'word ' * 40):.2f}")
 
 
 if __name__ == "__main__":
