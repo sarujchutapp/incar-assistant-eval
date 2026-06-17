@@ -8,7 +8,7 @@ normalized ``ToolCall``. All model-output handling lives here.
 import json
 
 from .client import ModelClient
-from .models import GoldRecord, ToolCall
+from .models import GoldRecord, ResponseMode, ToolCall
 from .schema import schema_text
 
 SYSTEM_PROMPT = (
@@ -31,7 +31,12 @@ def build_prompt(record: GoldRecord) -> str:
 
 def parse_tool_call(raw: str) -> ToolCall:
     data = json.loads(raw)
-    return ToolCall(intent=data["intent"], slots=data.get("slots", {}))
+    return ToolCall(
+        intent=data["intent"],
+        slots=data.get("slots", {}),
+        mode=ResponseMode(data.get("mode", "execute")),
+        eyes_free=data.get("eyes_free", True),
+    )
 
 
 def run_case(record: GoldRecord, client: ModelClient) -> ToolCall:

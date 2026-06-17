@@ -1,7 +1,7 @@
 """The scorer — a pure, deterministic function with no I/O.
 
-Slice 2 grades routing (act vs abstain), intent, and slots (F1 + exact match).
-The safety cost model (slice 3) extends this.
+Combines routing (act vs abstain), intent/slot correctness, and the §11 safety
+cost model into one per-case outcome.
 """
 
 from typing import Any
@@ -11,14 +11,17 @@ from .models import (
     COMMAND_INTENTS,
     CaseOutcome,
     GoldRecord,
+    ResponseMode,
     RoutingOutcome,
     ToolCall,
 )
+from .safety import classify_cost, expected_mode
+from .schema import SCHEMA
 
 
 def _acted(emitted: ToolCall) -> bool:
-    """The assistant acted unless it emitted an abstention label."""
-    return emitted.intent not in ABSTENTION_LABELS
+    """The assistant acted unless it clarified or emitted an abstention label."""
+    return emitted.mode is not ResponseMode.CLARIFY and emitted.intent not in ABSTENTION_LABELS
 
 
 def classify_routing(expected_intent: str, emitted: ToolCall) -> RoutingOutcome:
@@ -46,6 +49,11 @@ def slot_f1(gold_slots: dict[str, Any], pred_slots: dict[str, Any]) -> float:
 
 
 def score_case(gold: GoldRecord, emitted: ToolCall) -> CaseOutcome:
+    exp_mode = (
+        None
+        if gold.expected_intent in ABSTENTION_LABELS
+        else expected_mode(SCHEMA[gold.expected_intent].stakes, gold.ambiguity)
+    )
     return CaseOutcome(
         gold=gold,
         emitted=emitted,
@@ -53,4 +61,6 @@ def score_case(gold: GoldRecord, emitted: ToolCall) -> CaseOutcome:
         intent_ok=emitted.intent == gold.expected_intent,
         slots_exact=emitted.slots == gold.expected_slots,
         slot_f1=slot_f1(gold.expected_slots, emitted.slots),
+        expected_mode=exp_mode,
+        cost=classify_cost(gold, emitted),
     )

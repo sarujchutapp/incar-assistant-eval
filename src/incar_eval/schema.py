@@ -7,7 +7,7 @@ per-case label (slice 3), not a schema axis.
 
 from typing import Literal
 
-from .models import ABSTENTION_LABELS, COMMAND_INTENTS, GoldRecord
+from .models import ABSTENTION_LABELS, AMBIGUITY_LABELS, COMMAND_INTENTS, GoldRecord
 
 Stakes = Literal["low", "high"]
 
@@ -67,6 +67,8 @@ def validate_record(record: GoldRecord) -> None:
     """Raise ValueError if a gold record's intent or slots aren't in the schema."""
     if record.expected_intent not in known_labels():
         raise ValueError(f"unknown intent label: {record.expected_intent!r}")
+    if record.ambiguity not in AMBIGUITY_LABELS:
+        raise ValueError(f"unknown ambiguity label: {record.ambiguity!r}")
     if record.expected_intent in COMMAND_INTENTS:
         allowed = set(SCHEMA[record.expected_intent].slots)
         extra = set(record.expected_slots) - allowed
