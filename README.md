@@ -30,3 +30,5 @@ Slices 1–4 are in place:
    ordering invariants, and confirmation calibration.
 4. Context-based cases — `car_state`/`vehicle_motion`, multi-turn Joint Goal
    Accuracy + per-turn, and blocked-while-moving (warn+alternative) scoring.
+5. Statistics & paired comparison — Wilson intervals on every proportion,
+   McNemar on the paired objective quadrant (no Elo), and a report card.

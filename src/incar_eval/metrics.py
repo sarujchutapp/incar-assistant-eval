@@ -1,6 +1,7 @@
 """Aggregate the decomposed metrics from a list of per-case outcomes.
 
-Slice 5 adds confidence intervals and paired model comparison on top of these.
+``proportion_counts`` returns (numerator, denominator) for each proportion so the
+rates here and the Wilson intervals in the report share a single source.
 """
 
 from dataclasses import dataclass
@@ -27,49 +28,65 @@ class Metrics:
     eyes_free_rate: float                  # over all emitted responses
 
 
-def _rate(numerator: float, denominator: int) -> float:
+def _rate(numerator: int, denominator: int) -> float:
     return numerator / denominator if denominator else 0.0
 
 
-def compute_metrics(outcomes: list[CaseOutcome]) -> Metrics:
-    # Hard-blocks are play_media commands but are scored entirely by the cost
-    # model, so they're excluded from routing / intent / slot metrics.
+def proportion_counts(outcomes: list[CaseOutcome]) -> dict[str, tuple[int, int]]:
+    """For each proportion metric, the (successes, total) pair."""
+    # Hard-blocks are play_media commands but scored by the cost model, so they're
+    # excluded from routing / intent / slot metrics. Ambiguous commands likewise.
     command = [o for o in outcomes if o.gold.expected_intent in COMMAND_INTENTS and not is_hard_block(o.gold)]
     routable = [o for o in outcomes if not is_hard_block(o.gold)]
-    # routing metrics also exclude ambiguous commands (scored by the cost model).
     routable_command = [o for o in command if o.gold.ambiguity != "ambiguous"]
     none_cases = [o for o in outcomes if o.gold.expected_intent == "none"]
     oos_cases = [o for o in outcomes if o.gold.expected_intent == "out_of_scope"]
     acted_command = [o for o in command if o.routing is RoutingOutcome.CORRECT_ACTION]
-    routing_correct = sum(
-        o.routing in (RoutingOutcome.CORRECT_ACTION, RoutingOutcome.CORRECT_ABSTENTION)
-        for o in routable
-    )
     high_stakes = [o for o in routable_command if SCHEMA[o.gold.expected_intent].stakes == "high"]
     low_stakes = [o for o in routable_command if SCHEMA[o.gold.expected_intent].stakes == "low"]
-    return Metrics(
-        n=len(outcomes),
-        tsr=_rate(sum(o.success for o in outcomes), len(outcomes)),
-        routing_accuracy=_rate(routing_correct, len(routable)),
-        false_activation_rate=_rate(
+    return {
+        "tsr": (sum(o.success for o in outcomes), len(outcomes)),
+        "routing_accuracy": (
+            sum(o.routing in (RoutingOutcome.CORRECT_ACTION, RoutingOutcome.CORRECT_ABSTENTION) for o in routable),
+            len(routable),
+        ),
+        "false_activation_rate": (
             sum(o.routing is RoutingOutcome.FALSE_ACTIVATION for o in none_cases), len(none_cases)
         ),
-        false_rejection_rate=_rate(
-            sum(o.routing is RoutingOutcome.FALSE_REJECTION for o in routable_command),
-            len(routable_command),
+        "false_rejection_rate": (
+            sum(o.routing is RoutingOutcome.FALSE_REJECTION for o in routable_command), len(routable_command)
         ),
-        intent_accuracy=_rate(sum(o.intent_ok for o in acted_command), len(acted_command)),
-        slot_f1=_rate(sum(o.slot_f1 for o in acted_command), len(acted_command)),
-        slots_exact_rate=_rate(sum(o.slots_exact for o in acted_command), len(acted_command)),
-        capability_hallucination_rate=_rate(
+        "intent_accuracy": (sum(o.intent_ok for o in acted_command), len(acted_command)),
+        "slots_exact_rate": (sum(o.slots_exact for o in acted_command), len(acted_command)),
+        "capability_hallucination_rate": (
             sum(o.routing is RoutingOutcome.CAPABILITY_HALLUCINATION for o in oos_cases), len(oos_cases)
         ),
-        mean_cost=_rate(sum(cost_of(o.cost) for o in outcomes), len(outcomes)),
-        under_confirm_rate=_rate(
-            sum(o.cost is CostCategory.UNDER_CONFIRM for o in high_stakes), len(high_stakes)
-        ),
-        over_confirm_rate=_rate(
-            sum(o.cost is CostCategory.OVER_CONFIRM_TRIVIAL for o in low_stakes), len(low_stakes)
-        ),
-        eyes_free_rate=_rate(sum(o.emitted.eyes_free for o in outcomes), len(outcomes)),
+        "under_confirm_rate": (sum(o.cost is CostCategory.UNDER_CONFIRM for o in high_stakes), len(high_stakes)),
+        "over_confirm_rate": (sum(o.cost is CostCategory.OVER_CONFIRM_TRIVIAL for o in low_stakes), len(low_stakes)),
+        "eyes_free_rate": (sum(o.emitted.eyes_free for o in outcomes), len(outcomes)),
+    }
+
+
+def compute_metrics(outcomes: list[CaseOutcome]) -> Metrics:
+    counts = proportion_counts(outcomes)
+    acted_command = [
+        o for o in outcomes
+        if o.gold.expected_intent in COMMAND_INTENTS
+        and not is_hard_block(o.gold)
+        and o.routing is RoutingOutcome.CORRECT_ACTION
+    ]
+    return Metrics(
+        n=len(outcomes),
+        tsr=_rate(*counts["tsr"]),
+        routing_accuracy=_rate(*counts["routing_accuracy"]),
+        false_activation_rate=_rate(*counts["false_activation_rate"]),
+        false_rejection_rate=_rate(*counts["false_rejection_rate"]),
+        intent_accuracy=_rate(*counts["intent_accuracy"]),
+        slot_f1=(sum(o.slot_f1 for o in acted_command) / len(acted_command)) if acted_command else 0.0,
+        slots_exact_rate=_rate(*counts["slots_exact_rate"]),
+        capability_hallucination_rate=_rate(*counts["capability_hallucination_rate"]),
+        mean_cost=(sum(cost_of(o.cost) for o in outcomes) / len(outcomes)) if outcomes else 0.0,
+        under_confirm_rate=_rate(*counts["under_confirm_rate"]),
+        over_confirm_rate=_rate(*counts["over_confirm_rate"]),
+        eyes_free_rate=_rate(*counts["eyes_free_rate"]),
     )
