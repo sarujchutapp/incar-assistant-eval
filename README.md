@@ -32,3 +32,5 @@ Slices 1–4 are in place:
    Accuracy + per-turn, and blocked-while-moving (warn+alternative) scoring.
 5. Statistics & paired comparison — Wilson intervals on every proportion,
    McNemar on the paired objective quadrant (no Elo), and a report card.
+6. Chat quadrant (objective-by-construction) — verifiable-answer cases scored by
+   faithfulness vs a provided fact, with answer relevancy reported.

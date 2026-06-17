@@ -5,6 +5,7 @@
 
 import json
 
+from .chat import ChatCase, run_chat_benchmark
 from .client import FakeModelClient
 from .dialogue import DialogueCase, Turn, run_dialogue
 from .models import CarState, GoldRecord
@@ -69,6 +70,18 @@ def main() -> None:
 
     dlg = run_dialogue(DIALOGUE, FakeModelClient(DIALOGUE_RESPONSES))
     print(f"\ndialogue JGA:      {dlg.jga:.1%}   per-turn: {dlg.per_turn_accuracy:.1%}")
+
+    chat_cases = [
+        ChatCase("what's my ETA?", fact="25 minutes"),
+        ChatCase("how much fuel is left?", fact="low"),
+    ]
+    chat_client = FakeModelClient({
+        "what's my ETA?": "Your ETA is about 25 minutes.",
+        "how much fuel is left?": "Fuel is running low.",
+    })
+    _, chat_metrics = run_chat_benchmark(chat_cases, chat_client)
+    print(f"chat faithfulness: {chat_metrics.faithfulness_rate:.1%}   "
+          f"relevancy: {chat_metrics.mean_relevancy:.2f}")
 
 
 if __name__ == "__main__":
