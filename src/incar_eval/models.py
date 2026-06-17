@@ -31,6 +31,7 @@ class ResponseMode(Enum):
     EXECUTE = "execute"      # silent execute — low-stakes/reversible
     CONFIRM = "confirm"      # confirm-with-cancel — high-stakes/irreversible
     CLARIFY = "clarify"      # ask first — ambiguous (does not act yet)
+    WARN_ALTERNATIVE = "warn_alternative"  # blocked-while-moving: warn + offer a safe alternative
 
 
 class RoutingOutcome(Enum):
@@ -60,6 +61,15 @@ class CostCategory(Enum):
     ACT_ON_AMBIGUOUS_HIGH = "act_on_ambiguous_high"      # guessed a high-stakes ambiguous command
     WRONG_IRREVERSIBLE = "wrong_irreversible"            # wrong send_message, but announced
     IRREVERSIBLE_SILENT_WRONG = "irreversible_silent_wrong"  # silent + wrong send_message (worst)
+    DEAD_END_REFUSE = "dead_end_refuse"                  # flat-refused a gated request, no alternative
+    UNSAFE_COMPLY = "unsafe_comply"                      # complied with a blocked-while-moving request
+
+
+@dataclass(frozen=True)
+class CarState:
+    """Thin simulated vehicle context — only what context-dependent cases need."""
+
+    vehicle_motion: str = "parked"  # moving | parked
 
 
 @dataclass(frozen=True)
@@ -67,7 +77,7 @@ class ToolCall:
     """A structured response the assistant emitted.
 
     An intent in ``ABSTENTION_LABELS`` means it declined to act; ``mode`` carries
-    the response mode (silent execute / confirm-with-cancel / clarify).
+    the response mode (silent execute / confirm-with-cancel / clarify / warn).
     """
 
     intent: str
@@ -84,6 +94,7 @@ class GoldRecord:
     expected_intent: str
     expected_slots: dict[str, Any] = field(default_factory=dict)
     ambiguity: str = "clear"
+    car_state: CarState | None = None
 
 
 @dataclass(frozen=True)
@@ -98,20 +109,10 @@ class CaseOutcome:
     slot_f1: float
     expected_mode: ResponseMode | None  # None for abstention cases
     cost: CostCategory
-
-    @property
-    def success(self) -> bool:
-        """Task success (TSR) = the expected behaviour with correct content.
-
-        Mode mis-calibration (over/under-confirm) is tracked separately in the
-        cost model, not folded into TSR (which is routing+intent+slot per §5).
-        """
-        intent = self.gold.expected_intent
-        if intent in ABSTENTION_LABELS:
-            return self.routing is RoutingOutcome.CORRECT_ABSTENTION
-        if self.gold.ambiguity == "ambiguous":
-            return self.emitted.mode is ResponseMode.CLARIFY
-        return self.routing is RoutingOutcome.CORRECT_ACTION and self.intent_ok and self.slots_exact
+    #: Task success (TSR) = the expected behaviour with correct content. Mode
+    #: mis-calibration (over/under-confirm) is tracked separately in the cost
+    #: model, not folded into TSR. Computed by the scorer (see safety.is_success).
+    success: bool
 
 
 @dataclass(frozen=True)

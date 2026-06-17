@@ -22,9 +22,13 @@ SYSTEM_PROMPT = (
 
 
 def build_prompt(record: GoldRecord) -> str:
+    context = ""
+    if record.car_state is not None:
+        context = f"Vehicle is {record.car_state.vehicle_motion}.\n"
     return (
         f"{SYSTEM_PROMPT}\n\n"
         f"Available intents:\n{schema_text()}\n\n"
+        f"{context}"
         f'Driver said: "{record.utterance}"'
     )
 

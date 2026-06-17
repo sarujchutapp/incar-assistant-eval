@@ -22,7 +22,14 @@ class FakeModelClient:
         self._responses = responses
 
     def complete(self, prompt: str) -> str:
+        # Pick the response whose utterance appears latest in the prompt, so that
+        # multi-turn prompts (which embed history) resolve to the current turn.
+        best_raw: str | None = None
+        best_pos = -1
         for utterance, raw in self._responses.items():
-            if utterance in prompt:
-                return raw
-        raise KeyError(f"FakeModelClient has no canned response for prompt: {prompt!r}")
+            pos = prompt.rfind(utterance)
+            if pos > best_pos:
+                best_pos, best_raw = pos, raw
+        if best_raw is None:
+            raise KeyError(f"FakeModelClient has no canned response for prompt: {prompt!r}")
+        return best_raw

@@ -6,7 +6,7 @@ Slice 5 adds confidence intervals and paired model comparison on top of these.
 from dataclasses import dataclass
 
 from .models import COMMAND_INTENTS, CaseOutcome, CostCategory, RoutingOutcome
-from .safety import cost_of
+from .safety import cost_of, is_hard_block
 from .schema import SCHEMA
 
 
@@ -32,22 +32,25 @@ def _rate(numerator: float, denominator: int) -> float:
 
 
 def compute_metrics(outcomes: list[CaseOutcome]) -> Metrics:
-    command = [o for o in outcomes if o.gold.expected_intent in COMMAND_INTENTS]
-    # routing rates exclude ambiguous commands (those are scored by the cost model)
+    # Hard-blocks are play_media commands but are scored entirely by the cost
+    # model, so they're excluded from routing / intent / slot metrics.
+    command = [o for o in outcomes if o.gold.expected_intent in COMMAND_INTENTS and not is_hard_block(o.gold)]
+    routable = [o for o in outcomes if not is_hard_block(o.gold)]
+    # routing metrics also exclude ambiguous commands (scored by the cost model).
     routable_command = [o for o in command if o.gold.ambiguity != "ambiguous"]
     none_cases = [o for o in outcomes if o.gold.expected_intent == "none"]
     oos_cases = [o for o in outcomes if o.gold.expected_intent == "out_of_scope"]
     acted_command = [o for o in command if o.routing is RoutingOutcome.CORRECT_ACTION]
     routing_correct = sum(
         o.routing in (RoutingOutcome.CORRECT_ACTION, RoutingOutcome.CORRECT_ABSTENTION)
-        for o in outcomes
+        for o in routable
     )
     high_stakes = [o for o in routable_command if SCHEMA[o.gold.expected_intent].stakes == "high"]
     low_stakes = [o for o in routable_command if SCHEMA[o.gold.expected_intent].stakes == "low"]
     return Metrics(
         n=len(outcomes),
         tsr=_rate(sum(o.success for o in outcomes), len(outcomes)),
-        routing_accuracy=_rate(routing_correct, len(outcomes)),
+        routing_accuracy=_rate(routing_correct, len(routable)),
         false_activation_rate=_rate(
             sum(o.routing is RoutingOutcome.FALSE_ACTIVATION for o in none_cases), len(none_cases)
         ),

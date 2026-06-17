@@ -15,13 +15,15 @@ from .models import (
     RoutingOutcome,
     ToolCall,
 )
-from .safety import classify_cost, expected_mode
+from .safety import classify_cost, expected_mode, is_success
 from .schema import SCHEMA
+
+_NON_ACTING_MODES = (ResponseMode.CLARIFY, ResponseMode.WARN_ALTERNATIVE)
 
 
 def _acted(emitted: ToolCall) -> bool:
-    """The assistant acted unless it clarified or emitted an abstention label."""
-    return emitted.mode is not ResponseMode.CLARIFY and emitted.intent not in ABSTENTION_LABELS
+    """The assistant acted unless it clarified/warned or emitted an abstention label."""
+    return emitted.mode not in _NON_ACTING_MODES and emitted.intent not in ABSTENTION_LABELS
 
 
 def classify_routing(expected_intent: str, emitted: ToolCall) -> RoutingOutcome:
@@ -54,13 +56,15 @@ def score_case(gold: GoldRecord, emitted: ToolCall) -> CaseOutcome:
         if gold.expected_intent in ABSTENTION_LABELS
         else expected_mode(SCHEMA[gold.expected_intent].stakes, gold.ambiguity)
     )
+    routing = classify_routing(gold.expected_intent, emitted)
     return CaseOutcome(
         gold=gold,
         emitted=emitted,
-        routing=classify_routing(gold.expected_intent, emitted),
+        routing=routing,
         intent_ok=emitted.intent == gold.expected_intent,
         slots_exact=emitted.slots == gold.expected_slots,
         slot_f1=slot_f1(gold.expected_slots, emitted.slots),
         expected_mode=exp_mode,
         cost=classify_cost(gold, emitted),
+        success=is_success(gold, emitted, routing),
     )

@@ -20,6 +20,13 @@ python -m pip install -e ".[dev]"
 
 ## Status
 
-Slice 1 (tracer bullet) is in place: a single intent (`set_climate`) walked
-end-to-end through schema → adapter → model-client port → scorer → runner,
-producing a Task Success Rate from recorded fixtures with no network calls.
+Slices 1–4 are in place:
+
+1. Tracer bullet — one intent walked end-to-end (schema → adapter → model-client
+   port → scorer → runner) to a Task Success Rate from recorded fixtures.
+2. Full v1 ontology (six intents + `none`/`out_of_scope`) with routing accuracy
+   (false-activation / false-rejection) and slot-F1.
+3. Safety model — `expected_mode(stakes, ambiguity)`, the §11 cost cells with
+   ordering invariants, and confirmation calibration.
+4. Context-based cases — `car_state`/`vehicle_motion`, multi-turn Joint Goal
+   Accuracy + per-turn, and blocked-while-moving (warn+alternative) scoring.
