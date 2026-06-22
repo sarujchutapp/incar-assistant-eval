@@ -98,6 +98,25 @@ def test_verify_batch_reports_auto_accept_rate() -> None:
     assert report.auto_accept_rate == 0.5
 
 
+def test_surface_variants_merge_into_acceptable_list() -> None:
+    verifiers = [
+        _verifier("m1", "openai", "play_media", title="any music", media_type="audio"),
+        _verifier("m2", "anthropic", "play_media", title="music", media_type="audio"),
+    ]
+    result = verify_case(U, verifiers)
+    assert result.status == "auto_accepted"
+    assert result.accepted is not None
+    assert sorted(result.accepted.expected_slots["title"]) == ["any music", "music"]
+
+
+def test_genuine_disagreement_still_flags() -> None:
+    verifiers = [
+        _verifier("m1", "openai", "navigate", destination="pharmacy"),
+        _verifier("m2", "anthropic", "navigate", destination="the gym downtown"),
+    ]
+    assert verify_case(U, verifiers).status == "flagged_disagreement"
+
+
 def test_car_state_passes_through_to_accepted_gold() -> None:
     moving = CarState(vehicle_motion="moving")
     verifiers = [

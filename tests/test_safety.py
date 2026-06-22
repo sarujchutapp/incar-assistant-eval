@@ -1,8 +1,32 @@
 import pytest
 
 from incar_eval.models import CostCategory, GoldRecord, ResponseMode, ToolCall
-from incar_eval.safety import COST, classify_cost, cost_of, expected_mode
+from incar_eval.safety import COST, classify_cost, cost_of, expected_mode, slots_match
 from incar_eval.scorer import score_case
+
+
+# --- SGD-style slot matching (categorical exact, non-categorical normalized list) ---
+
+
+def test_noncategorical_normalized_match() -> None:
+    assert slots_match({"destination": "Home"}, None, {"destination": "home"})
+    assert slots_match({"destination": "the airport"}, None, {"destination": "airport"})
+    assert not slots_match({"destination": "home"}, None, {"destination": "work"})
+
+
+def test_acceptable_value_list() -> None:
+    gold = {"title": ["any music", "music"]}
+    assert slots_match(gold, None, {"title": "music"})
+    assert slots_match(gold, None, {"title": "any music"})
+    assert not slots_match(gold, None, {"title": "jazz"})
+
+
+def test_categorical_slot_stays_exact() -> None:
+    assert not slots_match({"zone": "all"}, None, {"zone": "driver"})
+
+
+def test_no_unexpected_slots_without_bands() -> None:
+    assert not slots_match({"name": "mom"}, None, {"name": "mom", "zone": "all"})
 
 # --- expected_mode truth table (total over stakes x ambiguity) ---
 

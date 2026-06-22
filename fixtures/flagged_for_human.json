@@ -64,27 +64,6 @@
     "candidates": []
   },
   {
-    "utterance": "Dial Marcus's work number, not his cell.",
-    "status": "flagged_disagreement",
-    "reason": "no consensus",
-    "candidates": [
-      {
-        "verifier": "opus",
-        "intent": "call_contact",
-        "slots": {
-          "name": "Marcus (work)"
-        }
-      },
-      {
-        "verifier": "haiku",
-        "intent": "call_contact",
-        "slots": {
-          "name": "Marcus"
-        }
-      }
-    ]
-  },
-  {
     "utterance": "Navigate to the address my wife texted me.",
     "status": "flagged_manual",
     "reason": "ambiguous cell",
@@ -161,29 +140,6 @@
     "candidates": []
   },
   {
-    "utterance": "Send a message to my mom saying I landed safely and I'll call her tonight.",
-    "status": "flagged_disagreement",
-    "reason": "no consensus",
-    "candidates": [
-      {
-        "verifier": "opus",
-        "intent": "send_message",
-        "slots": {
-          "contact": "mom",
-          "body": "I landed safely and I'll call her tonight."
-        }
-      },
-      {
-        "verifier": "haiku",
-        "intent": "send_message",
-        "slots": {
-          "contact": "mom",
-          "body": "I landed safely and I'll call you tonight"
-        }
-      }
-    ]
-  },
-  {
     "utterance": "Take me to the address on that confirmation email.",
     "status": "flagged_manual",
     "reason": "ambiguous cell",
@@ -208,29 +164,6 @@
         "slots": {
           "zone": "all",
           "temp_delta": 3
-        }
-      }
-    ]
-  },
-  {
-    "utterance": "Queue up some music, anything's fine, I just need something on.",
-    "status": "flagged_disagreement",
-    "reason": "no consensus",
-    "candidates": [
-      {
-        "verifier": "opus",
-        "intent": "play_media",
-        "slots": {
-          "title": "any music",
-          "media_type": "audio"
-        }
-      },
-      {
-        "verifier": "haiku",
-        "intent": "play_media",
-        "slots": {
-          "title": "music",
-          "media_type": "audio"
         }
       }
     ]

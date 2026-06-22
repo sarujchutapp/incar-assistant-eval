@@ -11,6 +11,7 @@ Two pure pieces:
   wrong-but-cancelable << wrong-and-irreversible.
 """
 
+import re
 from typing import Any
 
 from .models import (
@@ -23,22 +24,63 @@ from .models import (
 )
 from .schema import SCHEMA
 
+#: Categorical (closed-vocabulary) slots — matched exactly, per Schema-Guided
+#: Dialogue. Everything else string-valued is non-categorical and matched by
+#: normalized string match against an acceptable-value list (MultiWOZ 2.2 style).
+CATEGORICAL_SLOTS: frozenset[str] = frozenset({"zone", "direction", "media_type"})
+
+#: Two surface forms of a non-categorical span count as the same when their token
+#: overlap (Jaccard) reaches this — used to merge verifier variants at authoring time.
+NONCAT_OVERLAP = 0.5
+
+_ARTICLES = frozenset({"the", "a", "an"})
+_MISSING = object()
+
+
+def _tokens(value: object) -> list[str]:
+    text = re.sub(r"[^\w\s]", " ", str(value).lower())
+    return [t for t in text.split() if t not in _ARTICLES]
+
+
+def token_overlap(a: object, b: object) -> float:
+    ta, tb = set(_tokens(a)), set(_tokens(b))
+    if not ta and not tb:
+        return 1.0
+    if not ta or not tb:
+        return 0.0
+    return len(ta & tb) / len(ta | tb)
+
+
+def _noncat_match(gold_value: object, emitted_value: object) -> bool:
+    variants = gold_value if isinstance(gold_value, list) else [gold_value]
+    emitted_tokens = _tokens(emitted_value)
+    return any(_tokens(v) == emitted_tokens for v in variants)
+
 
 def slots_match(
     expected: dict[str, Any],
     bands: dict[str, tuple[int, int]] | None,
     emitted: dict[str, Any],
 ) -> bool:
-    """Exact slot match, unless the gold has bands: then expected slots must match,
-    band slots must fall in their inclusive range, and extra slots (e.g. a default
-    zone) are tolerated."""
-    if not bands:
-        return emitted == expected
-    if any(emitted.get(k) != v for k, v in expected.items()):
+    """SGD-style slot match. Categorical and numeric slots match exactly;
+    non-categorical (free-text) slots match by normalized string against an
+    acceptable-value list. When bands are present (defaultable), band slots must
+    fall in range and extra default slots are tolerated; otherwise no extra slots."""
+    bands = bands or {}
+    if not bands and set(emitted) - (set(expected) | set(bands)):
         return False
+    for slot, value in expected.items():
+        emitted_value = emitted.get(slot, _MISSING)
+        if emitted_value is _MISSING:
+            return False
+        if slot in CATEGORICAL_SLOTS or isinstance(value, (int, float, bool)):
+            if emitted_value != value:
+                return False
+        elif not _noncat_match(value, emitted_value):
+            return False
     for slot, (lo, hi) in bands.items():
-        value = emitted.get(slot)
-        if isinstance(value, bool) or not isinstance(value, (int, float)) or not (lo <= value <= hi):
+        v = emitted.get(slot)
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or not (lo <= v <= hi):
             return False
     return True
 

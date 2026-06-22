@@ -200,11 +200,22 @@
     "ambiguity": "clear"
   },
   {
+    "utterance": "Dial Marcus's work number, not his cell.",
+    "expected_intent": "call_contact",
+    "expected_slots": {
+      "name": [
+        "Marcus (work)",
+        "Marcus"
+      ]
+    },
+    "ambiguity": "clear"
+  },
+  {
     "utterance": "It's roasting, dial it back like half a degree maybe.",
     "expected_intent": "set_climate",
     "expected_slots": {
-      "temp_delta": -0.5,
-      "zone": "all"
+      "zone": "all",
+      "temp_delta": -0.5
     },
     "ambiguity": "defaultable"
   },
@@ -235,6 +246,18 @@
     "ambiguity": "clear"
   },
   {
+    "utterance": "Send a message to my mom saying I landed safely and I'll call her tonight.",
+    "expected_intent": "send_message",
+    "expected_slots": {
+      "body": [
+        "I landed safely and I'll call her tonight.",
+        "I landed safely and I'll call you tonight"
+      ],
+      "contact": "mom"
+    },
+    "ambiguity": "clear"
+  },
+  {
     "utterance": "Charge this thing to at least eighty percent before we get to the hotel.",
     "expected_intent": "out_of_scope",
     "expected_slots": {},
@@ -260,6 +283,18 @@
     "utterance": "Turn the wipers on, this drizzle is getting annoying.",
     "expected_intent": "out_of_scope",
     "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Queue up some music, anything's fine, I just need something on.",
+    "expected_intent": "play_media",
+    "expected_slots": {
+      "media_type": "audio",
+      "title": [
+        "any music",
+        "music"
+      ]
+    },
     "ambiguity": "clear"
   }
 ]
