@@ -40,3 +40,11 @@ Slices 1–4 are in place:
 
 Slices 8–9 (human-satisfaction validation anchor; case authoring at scale +
 recorded-fixtures demo run) are HITL and tracked on GitLab.
+
+To cut the slice-9 human-verification load, `incar_eval.verify` does
+**cross-family auto-verification**: several different-family models propose the
+gold for each utterance, agreement (≥2 families) auto-accepts, and only
+disagreements + hand-authored safety/ambiguous/out_of_scope cells are flagged for
+a human. The human-satisfaction anchor (slice 8) is deliberately *not* automated —
+substituting an LLM there would reintroduce the Type-C "no independent
+verification" weakness it exists to defend against.

@@ -11,6 +11,7 @@ from .dialogue import DialogueCase, Turn, run_dialogue
 from .judge import Comparison, bradley_terry_with_ci, role_adherence
 from .models import CarState, GoldRecord
 from .report import compare_tsr, format_report, model_report, run_models
+from .verify import CaseSpec, VerifierModel, verify_batch
 
 
 def _raw(intent: str, mode: str = "execute", **slots: object) -> str:
@@ -97,6 +98,23 @@ def main() -> None:
         print(f"  {name:6} {s.value:.2f}  [{s.lo:.2f}, {s.hi:.2f}]")
     print(f"role adherence - concise: {role_adherence('Your ETA is 25 minutes.'):.2f}   "
           f"rambling: {role_adherence('By the way, ' + 'word ' * 40):.2f}")
+
+    # Cross-family auto-verification: two different-family verifiers agree on the
+    # climate gold (auto-accepted); the send_message cell is hand-authored (flagged).
+    def _v(family: str, mapping: dict[str, str]) -> VerifierModel:
+        return VerifierModel(family, family, FakeModelClient(mapping))
+
+    vmap = {
+        "turn it up to 22": _raw("set_climate", temp=22),
+        "text my boss the update": _raw("send_message", contact="boss", body="update"),
+    }
+    verifiers = [_v("openai", vmap), _v("anthropic", vmap)]
+    vreport = verify_batch(
+        [CaseSpec("turn it up to 22"), CaseSpec("text my boss the update", force_manual=True)],
+        verifiers,
+    )
+    print(f"\nauto-verify: {len(vreport.accepted)} auto-accepted, "
+          f"{len(vreport.flagged)} flagged for human ({vreport.auto_accept_rate:.0%} auto)")
 
 
 if __name__ == "__main__":

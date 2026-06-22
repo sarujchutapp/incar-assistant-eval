@@ -8,7 +8,7 @@ normalized ``ToolCall``. All model-output handling lives here.
 import json
 
 from .client import ModelClient
-from .models import GoldRecord, ResponseMode, ToolCall
+from .models import CarState, GoldRecord, ResponseMode, ToolCall
 from .schema import schema_text
 
 SYSTEM_PROMPT = (
@@ -21,16 +21,18 @@ SYSTEM_PROMPT = (
 )
 
 
-def build_prompt(record: GoldRecord) -> str:
-    context = ""
-    if record.car_state is not None:
-        context = f"Vehicle is {record.car_state.vehicle_motion}.\n"
+def build_query_prompt(utterance: str, car_state: CarState | None = None) -> str:
+    context = f"Vehicle is {car_state.vehicle_motion}.\n" if car_state is not None else ""
     return (
         f"{SYSTEM_PROMPT}\n\n"
         f"Available intents:\n{schema_text()}\n\n"
         f"{context}"
-        f'Driver said: "{record.utterance}"'
+        f'Driver said: "{utterance}"'
     )
+
+
+def build_prompt(record: GoldRecord) -> str:
+    return build_query_prompt(record.utterance, record.car_state)
 
 
 def parse_tool_call(raw: str) -> ToolCall:

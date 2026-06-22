@@ -22,3 +22,27 @@ Author the real dataset at scale and produce the demonstration. Generate ~400 co
 ## Blocked by
 
 - [04-context-cases-carstate-jga.md](./04-context-cases-carstate-jga.md)
+
+## Comments
+
+### Progress note — cross-family auto-verification built (reduces human load)
+
+To address the lack of human-review resource, the automatable core of this slice
+is now built (`src/incar_eval/verify.py`, `tests/test_verify.py`):
+
+- Several **different-family** verifier models independently map each synthesized
+  utterance to a tool call through the model-client port.
+- **Agreement auto-accepts**: if ≥2 distinct families agree on (intent, slots),
+  the gold is auto-accepted. Disagreements → `flagged_disagreement`.
+- Hand-authored **safety / out_of_scope** cells (`force_manual`) and all
+  **ambiguous** cells are always flagged for human review — never auto-accepted
+  (their gold is the clarify behaviour, which content consensus can't establish).
+- `verify_batch` reports an `auto_accept_rate`, so the human queue is just the
+  flagged remainder.
+
+**Still HITL / remaining for this slice:**
+- Wire real cross-family clients to the model-client port (out of scope here;
+  recorded fixtures / FakeModelClient only so far).
+- Actually synthesize the ~400 utterances and run them through `verify_batch`.
+- Human spot-check the flagged remainder + author the safety/ambiguous cells.
+- Record fixtures and produce the multi-tier discrimination demo run.
