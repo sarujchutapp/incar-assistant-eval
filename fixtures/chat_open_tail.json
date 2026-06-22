@@ -1,0 +1,88 @@
+{
+  "models": [
+    {"name": "strong", "family": "anthropic"},
+    {"name": "mid", "family": "openai"},
+    {"name": "weak", "family": "google"}
+  ],
+  "judge_family": "meta",
+  "questions": [
+    {
+      "question": "Should I take the highway or the back roads to avoid traffic right now?",
+      "answers": {
+        "strong": "Highway saves 8 minutes despite current slowdowns near exit 14. Take it unless you need fuel — next highway gas is 40 miles out.",
+        "mid": "The highway might be faster but there is some traffic. The back roads are a bit slower overall but less congested. It depends on your preference.",
+        "weak": "That's a great question! Traffic can be really unpredictable and both routes have their pros and cons depending on what you value in a drive, whether that's speed or a more scenic experience."
+      },
+      "pairs": [
+        {"a": "strong", "b": "mid", "forward": {"critique": "Strong gives a specific time delta (8 min) and actionable constraint (fuel location/distance); mid is vague about relative speeds and purely preference-based.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Mid hedges without data; strong commits with specifics (8 min, exit 14, 40-mile fuel gap).", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "strong", "b": "weak", "forward": {"critique": "Strong is direct and metric-driven; weak meanders into philosophy about scenic vs. speed trade-offs that a driver doesn't need right now.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak rambles about values and subjective experience; strong cuts straight to the answer with a time-based decision.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "mid", "b": "weak", "forward": {"critique": "Mid acknowledges trade-offs concretely; weak is an unfocused monologue that avoids commitment.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak drifts into generic safety platitudes; mid at least frames the choice.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}}
+      ]
+    },
+    {
+      "question": "What should I play to help me stay alert on this long stretch?",
+      "answers": {
+        "strong": "Upbeat playlists or podcasts with moderate pacing work best for alertness. Want me to start your 'Road Energy' playlist or a news podcast?",
+        "mid": "Listening to music you enjoy can help you stay alert. I can play something upbeat or a podcast if you'd like — just let me know what you prefer.",
+        "weak": "Staying alert while driving is really important and there are many different things people find helpful. Some people like music, others like podcasts or even audiobooks, and of course taking breaks is also a key factor in long-distance driving safety."
+      },
+      "pairs": [
+        {"a": "strong", "b": "mid", "forward": {"critique": "Strong gives a specific recommendation (Road Energy playlist / news podcast) and rationale; mid is generic and defers the choice entirely.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "tie"}, "winner": "A"}, "reverse": {"critique": "Mid provides less guidance; strong leads with evidence-based advice and concrete options.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "tie"}, "winner": "B"}},
+        {"a": "strong", "b": "weak", "forward": {"critique": "Strong is actionable (upbeat, moderate pacing, named playlist); weak buries the insight in a ramble about personal preference and break safety.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak is unfocused and preachy; strong gets to the point with specific guidance.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "mid", "b": "weak", "forward": {"critique": "Mid offers music/podcast options and asks for preference; weak is a sprawling list of possibilities that avoids answering.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak is verbose and meandering; mid is concise and offers a path forward.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}}
+      ]
+    },
+    {
+      "question": "We're planning to stop for dinner. What's a good option roughly halfway through the trip?",
+      "answers": {
+        "strong": "Halfway puts you near Riverside around 6:45 pm. There's a well-rated diner with quick service right off exit 22 — about a 4-minute detour.",
+        "mid": "Around the halfway point there should be a few restaurant options. I can search for places near that area if you give me a bit more detail on what you're in the mood for.",
+        "weak": "Dinner sounds like a wonderful idea! There are lots of great restaurants all along this route and it really comes down to what kind of food everyone is in the mood for, plus how long you want to stop, and whether you want fast food or something sit-down."
+      },
+      "pairs": [
+        {"a": "strong", "b": "mid", "forward": {"critique": "Strong provides exact timing (6:45 pm), named location, specific restaurant type, and detour cost; mid is vague and asks for more info despite the driver just answering.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Mid defers action back to the driver; strong solves the question with concrete details.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "strong", "b": "weak", "forward": {"critique": "Strong nails specifics (Riverside, 6:45 pm, exit 22, diner, 4-minute detour); weak is a generic pep talk that doesn't answer the question.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak rambles about subjective preferences; strong delivers concrete actionable information.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "mid", "b": "weak", "forward": {"critique": "Mid acknowledges restaurants exist and offers to search; weak is a generalist monologue that adds no information.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak is unhelpful filler; mid at least proposes a next step.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}}
+      ]
+    },
+    {
+      "question": "My lane-keep assist keeps beeping. Is something wrong with the system?",
+      "answers": {
+        "strong": "Repeated alerts usually mean lane markings are faint or the camera is dirty. Check the windshield near the rearview mirror. If it persists, a dealer diagnostic is recommended.",
+        "mid": "Lane-keep assist can beep for a few reasons — faded lane markings, a dirty camera sensor, or you may be drifting slightly. It's worth having it checked if it keeps happening.",
+        "weak": "Lane-keep assist is a safety feature that is designed to help you stay in your lane and the beeping is how it communicates with you. There could be various reasons it keeps going off and it might be worth looking into at some point when you get a chance."
+      },
+      "pairs": [
+        {"a": "strong", "b": "mid", "forward": {"critique": "Strong diagnoses root causes (faint markings, dirty camera), prescribes immediate check (windshield), and escalation path (dealer); mid lists possibilities without actionable next steps.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Mid is less directive; strong provides a clear troubleshooting sequence.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "strong", "b": "weak", "forward": {"critique": "Strong is diagnostic and actionable (check mirror, dealer if persists); weak is reassuring but vague and doesn't address the driver's concern.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak is a hand-wave; strong gives concrete troubleshooting steps.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "mid", "b": "weak", "forward": {"critique": "Mid names plausible causes and suggests follow-up; weak is generic safety talk that doesn't help the driver act.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak is unfocused; mid offers diagnostic value.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}}
+      ]
+    },
+    {
+      "question": "Can I make it to Seattle without stopping to charge, or should I plan a stop?",
+      "answers": {
+        "strong": "Seattle is 142 miles out; you have 87 miles of range. You'll need one charge stop. Fastest option is the Supercharger in Olympia — 22 minutes for enough charge to finish the trip.",
+        "mid": "Based on your current range, Seattle is probably too far to reach without charging. You should plan at least one stop somewhere along the way to top up before the last stretch.",
+        "weak": "It's hard to say for sure without knowing all the details, but electric vehicle range can vary quite a bit based on driving speed, climate control usage, elevation changes, and many other factors, so planning ahead is always a smart idea on longer trips."
+      },
+      "pairs": [
+        {"a": "strong", "b": "mid", "forward": {"critique": "Strong gives exact distance (142 mi), range gap (87 mi), specific charging location (Olympia Supercharger), and time-to-completion (22 min); mid is equivocal and vague about where to stop.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Mid hedges without data; strong commits with precise metrics and a solution.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "strong", "b": "weak", "forward": {"critique": "Strong is a decision engine with math and a specific stop; weak is a deflection into variables the driver didn't ask about.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak lists factors but doesn't answer; strong solves the question directly.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "mid", "b": "weak", "forward": {"critique": "Mid confirms the need for a stop; weak buries the answer in a sea of qualifiers.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak is unfocused and vague; mid at least establishes the core fact (charging required).", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}}
+      ]
+    },
+    {
+      "question": "Is it safe to use cruise control in these road conditions?",
+      "answers": {
+        "strong": "Road is dry and straight — cruise control is fine here. Avoid it if rain picks up past Grants Pass; conditions look wet there in about 35 miles.",
+        "mid": "Current conditions look okay for cruise control. Just be ready to take over if the weather changes or traffic thickens. Wet roads ahead later might warrant turning it off.",
+        "weak": "Cruise control is a feature that can be really convenient on long trips and under the right conditions many drivers find it helpful, though of course it's always important to stay attentive and be ready to respond to whatever happens on the road."
+      },
+      "pairs": [
+        {"a": "strong", "b": "mid", "forward": {"critique": "Strong gives a green light with conditions (dry, straight) and a specific risk zone (wet roads past Grants Pass in 35 miles); mid is cautious but less informative.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Mid is hedge-y; strong commits with road conditions and a forward-looking warning.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "strong", "b": "weak", "forward": {"critique": "Strong is contextual and forward-looking (dry now, wet ahead); weak is a platitude about attentiveness that doesn't address the question.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak is generic safety theater; strong gives tactical guidance.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}},
+        {"a": "mid", "b": "weak", "forward": {"critique": "Mid gives a clear yes with caveats; weak is unfocused and doesn't land a recommendation.", "dimensions": {"faithfulness": "A", "relevancy": "A", "conciseness": "A"}, "winner": "A"}, "reverse": {"critique": "Weak is rambling; mid is direct.", "dimensions": {"faithfulness": "B", "relevancy": "B", "conciseness": "B"}, "winner": "B"}}
+      ]
+    }
+  ]
+}

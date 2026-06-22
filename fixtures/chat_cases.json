@@ -1,0 +1,14 @@
+[
+  {"question": "How long until I reach the airport?", "fact": "25 minutes"},
+  {"question": "What's my current fuel range?", "fact": "87 miles"},
+  {"question": "What's the temperature outside right now?", "fact": "72 degrees"},
+  {"question": "How far is the next rest stop?", "fact": "18 kilometers"},
+  {"question": "What time will I arrive at my destination?", "fact": "9 40 pm"},
+  {"question": "How much fuel do I have left?", "fact": "half a tank"},
+  {"question": "What's the weather like at my destination?", "fact": "sunny"},
+  {"question": "How long have I been driving?", "fact": "1 hour 12 minutes"},
+  {"question": "What's the speed limit here?", "fact": "65 mph"},
+  {"question": "How many miles to the next exit?", "fact": "4 miles"},
+  {"question": "What's my current battery level?", "fact": "62 percent"},
+  {"question": "How long is traffic adding to my trip?", "fact": "11 minutes"}
+]

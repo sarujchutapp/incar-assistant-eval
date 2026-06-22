@@ -1,0 +1,44 @@
+{
+  "strong": {
+    "How long until I reach the airport?": "You'll arrive in 25 minutes.",
+    "What's my current fuel range?": "You have 87 miles of range remaining.",
+    "What's the temperature outside right now?": "It's 72 degrees outside.",
+    "How far is the next rest stop?": "The next rest stop is 18 kilometers ahead.",
+    "What time will I arrive at my destination?": "You'll arrive at 9 40 pm.",
+    "How much fuel do I have left?": "You've got about half a tank.",
+    "What's the weather like at my destination?": "Sunny skies at your destination.",
+    "How long have I been driving?": "You've been driving for 1 hour 12 minutes.",
+    "What's the speed limit here?": "Speed limit is 65 mph.",
+    "How many miles to the next exit?": "Next exit in 4 miles.",
+    "What's my current battery level?": "Battery is at 62 percent.",
+    "How long is traffic adding to my trip?": "Traffic is adding about 11 minutes to your trip."
+  },
+  "mid": {
+    "How long until I reach the airport?": "You should get there in about 25 minutes, barring any new delays.",
+    "What's my current fuel range?": "Your range is looking like around 95 miles based on current conditions.",
+    "What's the temperature outside right now?": "Outside temperature is sitting at 72 degrees.",
+    "How far is the next rest stop?": "The next rest stop is roughly 24 kilometers away.",
+    "What time will I arrive at my destination?": "Estimated arrival is 9 40 pm.",
+    "How much fuel do I have left?": "Fuel gauge shows half a tank right now.",
+    "What's the weather like at my destination?": "Expect partly cloudy skies when you arrive.",
+    "How long have I been driving?": "You've been on the road for 1 hour 12 minutes.",
+    "What's the speed limit here?": "The posted limit here is 70 mph.",
+    "How many miles to the next exit?": "Next exit is in 4 miles.",
+    "What's my current battery level?": "Battery is sitting at 62 percent.",
+    "How long is traffic adding to my trip?": "Traffic is tacking on about 11 minutes to your ETA."
+  },
+  "weak": {
+    "How long until I reach the airport?": "It depends on traffic, but you should be there fairly soon.",
+    "What's my current fuel range?": "You have 87 miles of range remaining.",
+    "What's the temperature outside right now?": "I'd recommend checking the weather app for the most accurate reading.",
+    "How far is the next rest stop?": "There are rest stops along this route. The next one is 18 kilometers away.",
+    "What time will I arrive at my destination?": "Your ETA is somewhere around 10 pm or so depending on conditions.",
+    "How much fuel do I have left?": "You've got about half a tank remaining.",
+    "What's the weather like at my destination?": "The forecast shows sunny weather at your destination.",
+    "How long have I been driving?": "You've been on the road for a while — over an hour at least.",
+    "What's the speed limit here?": "The speed limit is 65 mph on this stretch.",
+    "How many miles to the next exit?": "Honestly, I'm not certain of the exact distance to the next exit right now.",
+    "What's my current battery level?": "Your battery is somewhere in the mid-range, probably around 55 to 65 percent.",
+    "How long is traffic adding to my trip?": "Traffic is causing some delays but the system is recalculating your route."
+  }
+}
