@@ -46,3 +46,13 @@ is now built (`src/incar_eval/verify.py`, `tests/test_verify.py`):
 - Actually synthesize the ~400 utterances and run them through `verify_batch`.
 - Human spot-check the flagged remainder + author the safety/ambiguous cells.
 - Record fixtures and produce the multi-tier discrimination demo run.
+
+### Progress — 2026-06-22
+
+**52 verified command/control cases** authored via the subagent synth→verify loop
+(target ~400, §5.1); flagged queue currently **empty**. Conventions adopted along
+the way (SGD/MultiWOZ slot matching, range-relative intensity, value
+canonicalization) — see `reserch/standards_alignment.md` + `schema_clarifications.md`.
+Remaining: keep running the loop to ~400 (mostly AFK + light human spot-check),
+then the multi-tier **demonstration run** once the unified scorecard (11 / #12) and
+real-model wiring (12 / #13) land. Roadmap: `reserch/roadmap.md`.

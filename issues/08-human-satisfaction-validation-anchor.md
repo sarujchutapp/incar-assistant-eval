@@ -24,3 +24,9 @@ Build the validation anchor that defends against the Type C over-fitting weaknes
 
 - [05-statistics-paired-comparison.md](./05-statistics-paired-comparison.md)
 - [07-chat-llm-judge-open-tail.md](./07-chat-llm-judge-open-tail.md)
+
+## Comments
+
+### Status — 2026-06-22
+
+Still the one irreducibly-human task — **NOT** automated by design (an LLM rating an LLM would reintroduce the Type-C "no independent verification" weakness; see `reserch/hitl_handling_decision.md`). Dependencies are ready: the command scorer is absolute and the chat judge is pairwise, so the human-anchor format can match (§9). Scope: one-time ~50–100 case sample, per-dimension correlation + judge↔human agreement. Best done once the command dataset (09 / GitLab #10) and chat set (10 / GitLab #11) are at size.
