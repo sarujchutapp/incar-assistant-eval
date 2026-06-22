@@ -22,8 +22,9 @@ class IntentSpec:
 
 SCHEMA: dict[str, IntentSpec] = {
     "set_climate": IntentSpec(
-        "set_climate", ("temp", "zone"), "low",
-        "Set cabin temperature. temp in degrees C; zone in {driver, passenger, all}.",
+        "set_climate", ("temp", "zone", "temp_delta"), "low",
+        "Set cabin temperature. temp = absolute degrees C; temp_delta = relative change "
+        "for 'warmer'/'cooler' (positive warmer, negative cooler); zone in {driver, passenger, all}.",
     ),
     "navigate": IntentSpec(
         "navigate", ("destination",), "low",
@@ -35,7 +36,8 @@ SCHEMA: dict[str, IntentSpec] = {
     ),
     "play_media": IntentSpec(
         "play_media", ("title", "artist", "media_type"), "low",
-        "Play media. media_type in {audio, video}, default audio.",
+        "Play audio/video from any available source or app. title = free-text of what to "
+        "play (song, show, or genre like 'jazz'); media_type in {audio, video}, default audio.",
     ),
     "adjust_volume": IntentSpec(
         "adjust_volume", ("direction", "amount"), "low",
@@ -71,7 +73,7 @@ def validate_record(record: GoldRecord) -> None:
         raise ValueError(f"unknown ambiguity label: {record.ambiguity!r}")
     if record.expected_intent in COMMAND_INTENTS:
         allowed = set(SCHEMA[record.expected_intent].slots)
-        extra = set(record.expected_slots) - allowed
+        extra = (set(record.expected_slots) | set(record.slot_bands or {})) - allowed
         if extra:
             raise ValueError(
                 f"intent {record.expected_intent!r} has no slots {sorted(extra)}; allowed: {sorted(allowed)}"

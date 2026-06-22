@@ -11,6 +11,8 @@ Two pure pieces:
   wrong-but-cancelable << wrong-and-irreversible.
 """
 
+from typing import Any
+
 from .models import (
     ABSTENTION_LABELS,
     CostCategory,
@@ -20,6 +22,25 @@ from .models import (
     ToolCall,
 )
 from .schema import SCHEMA
+
+
+def slots_match(
+    expected: dict[str, Any],
+    bands: dict[str, tuple[int, int]] | None,
+    emitted: dict[str, Any],
+) -> bool:
+    """Exact slot match, unless the gold has bands: then expected slots must match,
+    band slots must fall in their inclusive range, and extra slots (e.g. a default
+    zone) are tolerated."""
+    if not bands:
+        return emitted == expected
+    if any(emitted.get(k) != v for k, v in expected.items()):
+        return False
+    for slot, (lo, hi) in bands.items():
+        value = emitted.get(slot)
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not (lo <= value <= hi):
+            return False
+    return True
 
 #: Severity of each cost cell (higher = worse). Only the ordering matters.
 COST: dict[CostCategory, float] = {
@@ -84,7 +105,7 @@ def is_success(gold: GoldRecord, emitted: ToolCall, routing: RoutingOutcome) -> 
     return (
         routing is RoutingOutcome.CORRECT_ACTION
         and emitted.intent == intent
-        and emitted.slots == gold.expected_slots
+        and slots_match(gold.expected_slots, gold.slot_bands, emitted.slots)
     )
 
 
@@ -107,7 +128,11 @@ def classify_cost(gold: GoldRecord, emitted: ToolCall) -> CostCategory:
     stakes = SCHEMA[intent].stakes
     acted = _acted(emitted)
     clarified = emitted.mode is ResponseMode.CLARIFY
-    action_correct = acted and emitted.intent == intent and emitted.slots == gold.expected_slots
+    action_correct = (
+        acted
+        and emitted.intent == intent
+        and slots_match(gold.expected_slots, gold.slot_bands, emitted.slots)
+    )
     irreversible = intent == IRREVERSIBLE_INTENT
     silent = emitted.mode is ResponseMode.EXECUTE
 

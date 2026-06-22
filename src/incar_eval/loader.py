@@ -23,12 +23,16 @@ def _to_gold(raw: dict[str, Any]) -> GoldRecord:
     car_state = None
     if raw.get("car_state"):
         car_state = CarState(vehicle_motion=raw["car_state"]["vehicle_motion"])
+    slot_bands = None
+    if raw.get("slot_bands"):
+        slot_bands = {slot: (rng[0], rng[1]) for slot, rng in raw["slot_bands"].items()}
     record = GoldRecord(
         utterance=raw["utterance"],
         expected_intent=raw["expected_intent"],
         expected_slots=raw.get("expected_slots", {}),
         ambiguity=raw.get("ambiguity", "clear"),
         car_state=car_state,
+        slot_bands=slot_bands,
     )
     validate_record(record)
     return record

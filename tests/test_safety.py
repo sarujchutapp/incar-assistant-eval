@@ -138,6 +138,19 @@ def test_defaultable_applies_gold_default() -> None:
 # --- score_case exposes expected_mode and cost ---
 
 
+def test_defaultable_climate_scored_by_band() -> None:
+    gold = GoldRecord(
+        "make it a bit warmer", "set_climate", {}, ambiguity="defaultable",
+        slot_bands={"temp_delta": (1, 2)},
+    )
+    # in band -> correct; an extra default zone is tolerated
+    assert score_case(gold, ToolCall("set_climate", {"temp_delta": 2, "zone": "all"})).success
+    assert score_case(gold, ToolCall("set_climate", {"temp_delta": 1})).cost is CostCategory.CORRECT
+    # out of band (too big) or wrong direction -> fail
+    assert not score_case(gold, ToolCall("set_climate", {"temp_delta": 5})).success
+    assert not score_case(gold, ToolCall("set_climate", {"temp_delta": -1})).success
+
+
 def test_score_case_carries_expected_mode_and_cost() -> None:
     gold = GoldRecord("call mom", "call_contact", {"name": "mom"}, ambiguity="clear")
     outcome = score_case(gold, ToolCall("call_contact", {"name": "mom"}, ResponseMode.CONFIRM))

@@ -95,6 +95,11 @@ class GoldRecord:
     expected_slots: dict[str, Any] = field(default_factory=dict)
     ambiguity: str = "clear"
     car_state: CarState | None = None
+    #: Slots scored by an inclusive [lo, hi] range instead of exact match — for
+    #: defaultable relative requests (e.g. "a bit warmer" -> temp_delta in [1, 2]).
+    #: When set, exact-match is relaxed: expected_slots must still match, band slots
+    #: must fall in range, and extra slots (e.g. a default zone) are allowed.
+    slot_bands: dict[str, tuple[int, int]] | None = None
 
 
 @dataclass(frozen=True)
