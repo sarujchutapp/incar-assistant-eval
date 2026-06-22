@@ -17,6 +17,14 @@ def test_parse_tool_call() -> None:
     assert call == ToolCall("set_climate", {"temp": 21, "zone": "all"})
 
 
+def test_parse_tool_call_tolerates_unknown_mode() -> None:
+    # Real models emit e.g. mode "none" on abstentions; ingestion must not crash.
+    from incar_eval.models import ResponseMode
+
+    call = parse_tool_call('{"intent": "none", "slots": {}, "mode": "none"}')
+    assert call.mode is ResponseMode.EXECUTE
+
+
 def test_run_case_goes_through_the_client() -> None:
     record = GoldRecord("make it 21", "set_climate", {"temp": 21, "zone": "all"})
     client = FakeModelClient({"make it 21": _raw("set_climate", temp=21, zone="all")})

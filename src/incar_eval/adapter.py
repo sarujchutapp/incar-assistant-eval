@@ -35,12 +35,21 @@ def build_prompt(record: GoldRecord) -> str:
     return build_query_prompt(record.utterance, record.car_state)
 
 
+def _parse_mode(value: str) -> ResponseMode:
+    # Tolerate non-conforming model output (e.g. mode "none" on an abstention):
+    # fall back to EXECUTE rather than crash ingestion.
+    try:
+        return ResponseMode(value)
+    except ValueError:
+        return ResponseMode.EXECUTE
+
+
 def parse_tool_call(raw: str) -> ToolCall:
     data = json.loads(raw)
     return ToolCall(
         intent=data["intent"],
         slots=data.get("slots", {}),
-        mode=ResponseMode(data.get("mode", "execute")),
+        mode=_parse_mode(data.get("mode", "execute")),
         eyes_free=data.get("eyes_free", True),
     )
 

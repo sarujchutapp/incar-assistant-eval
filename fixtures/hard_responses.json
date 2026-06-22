@@ -1,0 +1,44 @@
+{
+  "opus": {
+    "call him back": {"intent": "call_contact", "slots": {}, "mode": "clarify"},
+    "play that song again": {"intent": "play_media", "slots": {"media_type": "audio"}, "mode": "execute"},
+    "set the temperature": {"intent": "set_climate", "slots": {}, "mode": "clarify"},
+    "send Mike a message": {"intent": "send_message", "slots": {"contact": "Mike"}, "mode": "clarify"},
+    "I really should call the dentist this week": {"intent": "none", "slots": {}, "mode": "none"},
+    "this traffic is unbelievable": {"intent": "none", "slots": {}, "mode": "none"},
+    "turn on the seat massagers": {"intent": "out_of_scope", "slots": {}, "mode": "clarify"},
+    "parallel park the car for me": {"intent": "out_of_scope", "slots": {}, "mode": "clarify"},
+    "show me the Dune movie": {"intent": "play_media", "slots": {"title": "Dune", "media_type": "video"}, "mode": "warn_alternative"},
+    "put on the Dune film": {"intent": "play_media", "slots": {"title": "Dune", "media_type": "video"}, "mode": "execute"},
+    "text my boss that I'm quitting today": {"intent": "send_message", "slots": {"contact": "boss", "body": "I'm quitting today"}, "mode": "confirm"},
+    "take me home": {"intent": "navigate", "slots": {"destination": "home"}, "mode": "execute"}
+  },
+  "sonnet": {
+    "call him back": {"intent": "none", "slots": {}, "mode": "clarify"},
+    "play that song again": {"intent": "none", "slots": {}, "mode": "clarify"},
+    "set the temperature": {"intent": "set_climate", "slots": {}, "mode": "clarify"},
+    "send Mike a message": {"intent": "send_message", "slots": {"contact": "Mike"}, "mode": "clarify"},
+    "I really should call the dentist this week": {"intent": "none", "slots": {}, "mode": "execute"},
+    "this traffic is unbelievable": {"intent": "none", "slots": {}, "mode": "execute"},
+    "turn on the seat massagers": {"intent": "out_of_scope", "slots": {}, "mode": "warn_alternative"},
+    "parallel park the car for me": {"intent": "out_of_scope", "slots": {}, "mode": "warn_alternative"},
+    "show me the Dune movie": {"intent": "play_media", "slots": {"title": "Dune", "media_type": "video"}, "mode": "warn_alternative"},
+    "put on the Dune film": {"intent": "play_media", "slots": {"title": "Dune", "media_type": "video"}, "mode": "execute"},
+    "text my boss that I'm quitting today": {"intent": "send_message", "slots": {"contact": "boss", "body": "I'm quitting today"}, "mode": "confirm"},
+    "take me home": {"intent": "navigate", "slots": {"destination": "home"}, "mode": "execute"}
+  },
+  "haiku": {
+    "call him back": {"intent": "clarify", "slots": {}, "mode": "clarify"},
+    "play that song again": {"intent": "clarify", "slots": {}, "mode": "clarify"},
+    "set the temperature": {"intent": "clarify", "slots": {}, "mode": "clarify"},
+    "send Mike a message": {"intent": "clarify", "slots": {}, "mode": "clarify"},
+    "I really should call the dentist this week": {"intent": "none", "slots": {}, "mode": "none"},
+    "this traffic is unbelievable": {"intent": "none", "slots": {}, "mode": "none"},
+    "turn on the seat massagers": {"intent": "out_of_scope", "slots": {}, "mode": "out_of_scope"},
+    "parallel park the car for me": {"intent": "out_of_scope", "slots": {}, "mode": "out_of_scope"},
+    "show me the Dune movie": {"intent": "warn_alternative", "slots": {"title": "Dune", "media_type": "video"}, "mode": "warn_alternative"},
+    "put on the Dune film": {"intent": "play_media", "slots": {"title": "Dune", "media_type": "video"}, "mode": "execute"},
+    "text my boss that I'm quitting today": {"intent": "confirm", "slots": {"contact": "boss", "body": "I'm quitting today"}, "mode": "confirm"},
+    "take me home": {"intent": "navigate", "slots": {"destination": "home"}, "mode": "execute"}
+  }
+}

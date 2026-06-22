@@ -1,0 +1,14 @@
+[
+  {"utterance": "call him back", "expected_intent": "call_contact", "expected_slots": {}, "ambiguity": "ambiguous"},
+  {"utterance": "play that song again", "expected_intent": "play_media", "expected_slots": {}, "ambiguity": "ambiguous"},
+  {"utterance": "set the temperature", "expected_intent": "set_climate", "expected_slots": {}, "ambiguity": "ambiguous"},
+  {"utterance": "send Mike a message", "expected_intent": "send_message", "expected_slots": {}, "ambiguity": "ambiguous"},
+  {"utterance": "I really should call the dentist this week", "expected_intent": "none", "expected_slots": {}, "ambiguity": "clear"},
+  {"utterance": "this traffic is unbelievable", "expected_intent": "none", "expected_slots": {}, "ambiguity": "clear"},
+  {"utterance": "turn on the seat massagers", "expected_intent": "out_of_scope", "expected_slots": {}, "ambiguity": "clear"},
+  {"utterance": "parallel park the car for me", "expected_intent": "out_of_scope", "expected_slots": {}, "ambiguity": "clear"},
+  {"utterance": "show me the Dune movie", "expected_intent": "play_media", "expected_slots": {"title": "Dune", "media_type": "video"}, "ambiguity": "clear", "car_state": {"vehicle_motion": "moving"}},
+  {"utterance": "put on the Dune film", "expected_intent": "play_media", "expected_slots": {"title": "Dune", "media_type": "video"}, "ambiguity": "clear", "car_state": {"vehicle_motion": "parked"}},
+  {"utterance": "text my boss that I'm quitting today", "expected_intent": "send_message", "expected_slots": {"contact": "boss", "body": "I'm quitting today"}, "ambiguity": "clear"},
+  {"utterance": "take me home", "expected_intent": "navigate", "expected_slots": {"destination": "home"}, "ambiguity": "clear"}
+]
