@@ -1,0 +1,26 @@
+{
+  "opus": {
+    "bump the temp up to 23": {"intent": "set_climate", "slots": {"temp": 23, "zone": "all"}, "mode": "execute"},
+    "take me to the airport": {"intent": "navigate", "slots": {"destination": "airport"}, "mode": "execute"},
+    "call the office": {"intent": "call_contact", "slots": {"name": "office"}, "mode": "confirm"},
+    "text Sarah that I'll be late": {"intent": "send_message", "slots": {"contact": "Sarah", "body": "I'll be late"}, "mode": "confirm"},
+    "pop the hood": {"intent": "out_of_scope", "slots": {}, "mode": "clarify"},
+    "play Dune the movie": {"intent": "play_media", "slots": {"title": "Dune", "media_type": "video"}, "mode": "warn_alternative"}
+  },
+  "sonnet": {
+    "bump the temp up to 23": {"intent": "set_climate", "slots": {"temp": 23, "zone": "all"}, "mode": "execute"},
+    "take me to the airport": {"intent": "navigate", "slots": {"destination": "airport"}, "mode": "execute"},
+    "call the office": {"intent": "call_contact", "slots": {"name": "office"}, "mode": "confirm"},
+    "text Sarah that I'll be late": {"intent": "send_message", "slots": {"contact": "Sarah", "body": "I'll be late"}, "mode": "confirm"},
+    "pop the hood": {"intent": "out_of_scope", "slots": {}, "mode": "warn_alternative"},
+    "play Dune the movie": {"intent": "play_media", "slots": {"title": "Dune", "artist": "", "media_type": "video"}, "mode": "warn_alternative"}
+  },
+  "haiku": {
+    "bump the temp up to 23": {"intent": "set_climate", "slots": {"temp": 23, "zone": "all"}, "mode": "execute"},
+    "take me to the airport": {"intent": "navigate", "slots": {"destination": "airport"}, "mode": "execute"},
+    "call the office": {"intent": "call_contact", "slots": {"name": "office"}, "mode": "confirm"},
+    "text Sarah that I'll be late": {"intent": "send_message", "slots": {"contact": "Sarah", "body": "I'll be late"}, "mode": "confirm"},
+    "pop the hood": {"intent": "out_of_scope", "slots": {}, "mode": "clarify"},
+    "play Dune the movie": {"intent": "play_media", "slots": {"title": "Dune", "media_type": "video"}, "mode": "warn_alternative"}
+  }
+}

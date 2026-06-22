@@ -1,0 +1,8 @@
+[
+  {"utterance": "bump the temp up to 23", "expected_intent": "set_climate", "expected_slots": {"temp": 23, "zone": "all"}, "ambiguity": "clear"},
+  {"utterance": "take me to the airport", "expected_intent": "navigate", "expected_slots": {"destination": "airport"}, "ambiguity": "clear"},
+  {"utterance": "call the office", "expected_intent": "call_contact", "expected_slots": {"name": "office"}, "ambiguity": "clear"},
+  {"utterance": "text Sarah that I'll be late", "expected_intent": "send_message", "expected_slots": {"contact": "Sarah", "body": "I'll be late"}, "ambiguity": "clear"},
+  {"utterance": "pop the hood", "expected_intent": "out_of_scope", "expected_slots": {}, "ambiguity": "clear"},
+  {"utterance": "play Dune the movie", "expected_intent": "play_media", "expected_slots": {"title": "Dune", "media_type": "video"}, "ambiguity": "clear", "car_state": {"vehicle_motion": "moving"}}
+]
