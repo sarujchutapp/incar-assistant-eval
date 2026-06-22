@@ -28,6 +28,25 @@ def test_categorical_slot_stays_exact() -> None:
 def test_no_unexpected_slots_without_bands() -> None:
     assert not slots_match({"name": "mom"}, None, {"name": "mom", "zone": "all"})
 
+
+def test_numeric_canonicalization() -> None:
+    # "15" (str), 15 (int), and "fifteen" (word) all match a numeric gold
+    assert slots_match({"amount": 15}, None, {"amount": "15"})
+    assert slots_match({"amount": 15}, None, {"amount": "fifteen"})
+    assert slots_match({"amount": 15}, None, {"amount": 15})
+    assert not slots_match({"amount": 15}, None, {"amount": 12})
+
+
+def test_number_words_canonicalize_in_free_text() -> None:
+    gold = {"body": "I'll call you in 15 minutes"}
+    assert slots_match(gold, None, {"body": "I'll call you in fifteen minutes"})
+
+
+def test_band_accepts_number_word() -> None:
+    gold = {"direction": "down"}
+    bands = {"amount": (1.0, 3.0)}
+    assert slots_match(gold, bands, {"direction": "down", "amount": "two"})
+
 # --- expected_mode truth table (total over stakes x ambiguity) ---
 
 

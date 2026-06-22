@@ -31,10 +31,41 @@ NONCAT_OVERLAP = 0.5
 _ARTICLES = frozenset({"the", "a", "an"})
 _MISSING = object()
 
+#: Spelled-out numbers -> digit strings, so "fifteen" and "15" canonicalize alike
+#: (MultiWOZ-style value normalization). Compound forms ("twenty five") are left
+#: as-is — uncommon in slot values and not worth the parser.
+_NUMBER_WORDS: dict[str, str] = {
+    w: str(n)
+    for n, w in enumerate(
+        ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+         "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen",
+         "seventeen", "eighteen", "nineteen", "twenty"]
+    )
+}
+_NUMBER_WORDS.update({"thirty": "30", "forty": "40", "fifty": "50", "sixty": "60",
+                      "seventy": "70", "eighty": "80", "ninety": "90", "hundred": "100"})
+
 
 def _tokens(value: object) -> list[str]:
     text = re.sub(r"[^\w\s]", " ", str(value).lower())
-    return [t for t in text.split() if t not in _ARTICLES]
+    return [_NUMBER_WORDS.get(t, t) for t in text.split() if t not in _ARTICLES]
+
+
+def _as_number(value: object) -> float | None:
+    """Coerce a number, digit string, or single number-word to a float; else None."""
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        token = value.strip().lower()
+        if token in _NUMBER_WORDS:
+            return float(_NUMBER_WORDS[token])
+        try:
+            return float(token)
+        except ValueError:
+            return None
+    return None
 
 
 def token_overlap(a: object, b: object) -> float:
@@ -101,14 +132,18 @@ def slots_match(
         emitted_value = emitted.get(slot, _MISSING)
         if emitted_value is _MISSING:
             return False
-        if slot in CATEGORICAL_SLOTS or isinstance(value, (int, float, bool)):
+        if slot in CATEGORICAL_SLOTS or isinstance(value, bool):
             if emitted_value != value:
+                return False
+        elif isinstance(value, (int, float)):
+            # numeric: canonicalize "15"/15/"fifteen" before comparing
+            if _as_number(emitted_value) != float(value):
                 return False
         elif not _noncat_match(value, emitted_value):
             return False
     for slot, (lo, hi) in bands.items():
-        v = emitted.get(slot)
-        if isinstance(v, bool) or not isinstance(v, (int, float)) or not (lo <= v <= hi):
+        v = _as_number(emitted.get(slot))
+        if v is None or not (lo <= v <= hi):
             return False
     return True
 

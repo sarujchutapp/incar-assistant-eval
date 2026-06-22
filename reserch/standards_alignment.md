@@ -15,18 +15,18 @@ Sources: Schema-Guided Dialogue (arXiv 1909.05855), MultiWOZ (1810.00278) / 2.2 
 | Intent accuracy + slot F1 + all-slots exact-match | SLURP / MASSIVE | `metrics.py` (intent_accuracy, slot_f1, slots_exact_rate) |
 | Joint Goal Accuracy for multi-turn | MultiWOZ | `dialogue.score_dialogue` JGA (uses the normalized matcher — see log 2026-06-22 #2) |
 | Categorical slots have enumerated `possible_values`, validated | SGD | `IntentSpec.categorical`; `CATEGORICAL_SLOTS` derived from the schema; `validate_record` rejects out-of-vocab (see log 2026-06-22 #1) |
+| Value canonicalization (number-words/digits, numeric coercion) | MultiWOZ | `safety._tokens` / `_as_number` (see log 2026-06-22 #3) |
 | Wilson intervals + paired significance | (stats best practice) | `stats.py` |
 
 ## Gaps worth closing (prioritized)
 
 | # | Gap | Standard says | We currently | Effort |
 | --- | --- | --- | --- | --- |
-| 3 | **No value canonicalization** | MultiWOZ canonicalizes numbers/times/units before matching ("8pm"→"20:00"); we saw "68°F"→20°C and "fifteen minutes" | only lowercase/punct/article strip; numerics/units uncanonicalized | medium |
 | 4 | **Binary slot-value scoring** | SLURP **SLU-F1**: slot-label F1 weighted by word/char **edit distance** on the value — partial credit for near-misses | non-cat value match is all-or-nothing | medium |
 | 5 | **`clarify` doesn't say which slot** | SGD `requested_slots`: the system requests the specific missing slot | `clarify` is a bare mode; we don't score *what* it should ask for | medium |
 | 6 | **Span grounding** | SGD/MultiWOZ 2.2: non-cat values are spans from the utterance (limits hallucinated values) | gold non-cat values are free strings, not utterance spans | low-med |
 
-(#1 and #2 closed — see Adoption log. Gap numbers are kept stable for reference.)
+(#1–#3 closed — see Adoption log. Gap numbers are kept stable for reference.)
 
 ## Deliberately N/A
 
@@ -38,7 +38,7 @@ Sources: Schema-Guided Dialogue (arXiv 1909.05855), MultiWOZ (1810.00278) / 2.2 
 
 ## Recommended order
 
-Next: **#3** (value canonicalization) since we've already hit it in real data; then #4–#6 as deepenings to weigh later.
+#1–#3 done. Remaining: **#4** (SLU-F1 partial-credit value scoring), then #5–#6 as deepenings to weigh later.
 
 ## Adoption log
 
@@ -48,3 +48,4 @@ A dated record of standards adopted, so the lineage of each convention is tracea
 - **2026-06-22 — Range-relative intensity.** Defaultable magnitude scored as a fraction of the car's own range (`car_state.climate_range`/`volume_range`) via an intensity tier, not fixed degrees. `safety.effective_bands`. (Our extension, in the spirit of MultiWOZ value normalization.) See `schema_clarifications.md` §5.
 - **2026-06-22 — #1 Categorical `possible_values` in the schema + validation.** Each command intent's `IntentSpec` declares its categorical slots and allowed values; `CATEGORICAL_SLOTS` is derived from the schema (no hardcoded set); `validate_record` rejects out-of-vocabulary categorical gold values (e.g. `zone="backseat"`). Ref: SGD `possible_values`.
 - **2026-06-22 — #2 JGA uses the normalized matcher.** `dialogue.score_dialogue` scores each turn's accumulated state with `safety.slots_match` instead of raw `==`, so multi-turn JGA applies the same categorical/non-categorical rules as single-turn (no stricter-by-accident multi-turn scoring). Ref: MultiWOZ 2.2 normalized DST matching.
+- **2026-06-22 — #3 Value canonicalization.** `safety._tokens` maps single number-words to digits ("fifteen"→"15") for non-categorical text; `safety._as_number` coerces numbers / digit strings / number-words for numeric and band slot comparison, so "15", 15, and "fifteen" match alike. Ref: MultiWOZ value normalization. **Units decision:** temperature is canonical **°C** by declaration (stated in the schema description + prompt); we do **not** auto-detect/convert °F→°C — too ambiguous without an explicit unit field to be safe. Compound number-words ("twenty five") are left unparsed (rare in slots).
