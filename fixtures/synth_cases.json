@@ -355,5 +355,68 @@
       "climate_range": 12
     },
     "intensity": "warmer:large"
+  },
+  {
+    "utterance": "I need to get there before the pharmacy closes, can you route me?",
+    "expected_intent": "navigate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Call the restaurant and let them know we're running about fifteen minutes late.",
+    "expected_intent": "call_contact",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "I want to watch something on the way there.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous",
+    "car_state": {
+      "vehicle_motion": "moving"
+    }
+  },
+  {
+    "utterance": "Navigate to the address my wife texted me.",
+    "expected_intent": "navigate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Tell him I'm stuck in traffic and I'll explain everything when I get there.",
+    "expected_intent": "send_message",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Put on the game, I don't want to miss any of it.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous",
+    "car_state": {
+      "vehicle_motion": "moving"
+    }
+  },
+  {
+    "utterance": "Route me somewhere I can grab a quick bite without getting off the highway.",
+    "expected_intent": "navigate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Stream that documentary from last night, I only got halfway through.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous",
+    "car_state": {
+      "vehicle_motion": "moving"
+    }
+  },
+  {
+    "utterance": "Take me to the address on that confirmation email.",
+    "expected_intent": "navigate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
   }
 ]
