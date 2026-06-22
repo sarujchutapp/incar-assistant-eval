@@ -296,5 +296,64 @@
       ]
     },
     "ambiguity": "clear"
+  },
+  {
+    "utterance": "Crank up the heat, I can literally see my breath in here.",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "defaultable",
+    "car_state": {
+      "vehicle_motion": "parked",
+      "climate_range": 12
+    },
+    "intensity": "warmer:large"
+  },
+  {
+    "utterance": "Turn the heat down just slightly, I'm getting a little warm.",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "defaultable",
+    "car_state": {
+      "vehicle_motion": "parked",
+      "climate_range": 12
+    },
+    "intensity": "cooler:slight"
+  },
+  {
+    "utterance": "This song is way too quiet, bump it up way more.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "up"
+    },
+    "ambiguity": "defaultable",
+    "car_state": {
+      "vehicle_motion": "parked",
+      "volume_range": 30
+    },
+    "intensity": "up:large"
+  },
+  {
+    "utterance": "Ugh, can you just turn it down a bit? Like a tiny bit, it's not that overwhelming.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "down"
+    },
+    "ambiguity": "defaultable",
+    "car_state": {
+      "vehicle_motion": "parked",
+      "volume_range": 30
+    },
+    "intensity": "down:slight"
+  },
+  {
+    "utterance": "It's freezing back here, seriously crank it.",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "defaultable",
+    "car_state": {
+      "vehicle_motion": "parked",
+      "climate_range": 12
+    },
+    "intensity": "warmer:large"
   }
 ]

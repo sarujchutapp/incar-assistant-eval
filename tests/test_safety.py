@@ -1,6 +1,6 @@
 import pytest
 
-from incar_eval.models import CostCategory, GoldRecord, ResponseMode, ToolCall
+from incar_eval.models import CarState, CostCategory, GoldRecord, ResponseMode, ToolCall
 from incar_eval.safety import COST, classify_cost, cost_of, expected_mode, slots_match
 from incar_eval.scorer import score_case
 
@@ -173,6 +173,26 @@ def test_defaultable_climate_scored_by_band() -> None:
     # out of band (too big) or wrong direction -> fail
     assert not score_case(gold, ToolCall("set_climate", {"temp_delta": 5})).success
     assert not score_case(gold, ToolCall("set_climate", {"temp_delta": -1})).success
+
+
+def test_intensity_band_is_relative_to_car_range() -> None:
+    # "crank the heat" = warmer:large; on a 12-degree range the band is ~[5.4, 9.6]
+    small = GoldRecord("crank the heat", "set_climate", {}, ambiguity="defaultable",
+                       car_state=CarState(climate_range=12), intensity="warmer:large")
+    assert score_case(small, ToolCall("set_climate", {"temp_delta": 7})).success
+    assert not score_case(small, ToolCall("set_climate", {"temp_delta": 2})).success  # too timid
+    # same tier, a wider-range car -> a proportionally larger band (adapts)
+    wide = GoldRecord("crank the heat", "set_climate", {}, ambiguity="defaultable",
+                      car_state=CarState(climate_range=24), intensity="warmer:large")
+    assert score_case(wide, ToolCall("set_climate", {"temp_delta": 14})).success
+    assert not score_case(wide, ToolCall("set_climate", {"temp_delta": 7})).success
+
+
+def test_volume_intensity_band_relative_to_range() -> None:
+    gold = GoldRecord("turn it down a bit", "adjust_volume", {"direction": "down"}, ambiguity="defaultable",
+                      car_state=CarState(volume_range=30), intensity="down:slight")
+    assert score_case(gold, ToolCall("adjust_volume", {"direction": "down", "amount": 4})).success
+    assert not score_case(gold, ToolCall("adjust_volume", {"direction": "down", "amount": 15})).success
 
 
 def test_score_case_carries_expected_mode_and_cost() -> None:

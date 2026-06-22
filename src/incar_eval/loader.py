@@ -22,7 +22,12 @@ from .schema import validate_record
 def _to_gold(raw: dict[str, Any]) -> GoldRecord:
     car_state = None
     if raw.get("car_state"):
-        car_state = CarState(vehicle_motion=raw["car_state"]["vehicle_motion"])
+        cs = raw["car_state"]
+        car_state = CarState(
+            vehicle_motion=cs.get("vehicle_motion", "parked"),
+            climate_range=cs.get("climate_range"),
+            volume_range=cs.get("volume_range"),
+        )
     slot_bands = None
     if raw.get("slot_bands"):
         slot_bands = {slot: (rng[0], rng[1]) for slot, rng in raw["slot_bands"].items()}
@@ -33,6 +38,7 @@ def _to_gold(raw: dict[str, Any]) -> GoldRecord:
         ambiguity=raw.get("ambiguity", "clear"),
         car_state=car_state,
         slot_bands=slot_bands,
+        intensity=raw.get("intensity"),
     )
     validate_record(record)
     return record

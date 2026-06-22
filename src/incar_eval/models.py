@@ -70,6 +70,10 @@ class CarState:
     """Thin simulated vehicle context — only what context-dependent cases need."""
 
     vehicle_motion: str = "parked"  # moving | parked
+    #: Total adjustable spans, in the car's own units, so intensity ("a bit" vs
+    #: "crank it") is scored relative to *this* car's range rather than fixed numbers.
+    climate_range: float | None = None  # e.g. 12 for a 16-28 C setpoint range
+    volume_range: float | None = None   # e.g. 30 for a 0-30 volume scale
 
 
 @dataclass(frozen=True)
@@ -99,7 +103,12 @@ class GoldRecord:
     #: defaultable relative requests (e.g. "a bit warmer" -> temp_delta in [1, 2]).
     #: When set, exact-match is relaxed: expected_slots must still match, band slots
     #: must fall in range, and extra slots (e.g. a default zone) are allowed.
-    slot_bands: dict[str, tuple[int, int]] | None = None
+    slot_bands: dict[str, tuple[float, float]] | None = None
+    #: Intensity tier "<direction>:<tier>" (e.g. "warmer:large", "down:slight") for
+    #: defaultable climate/volume. The band is derived as a fraction of the car's
+    #: range at scoring time, so it adapts to the car's units. Takes effect only
+    #: when car_state carries the matching range.
+    intensity: str | None = None
 
 
 @dataclass(frozen=True)

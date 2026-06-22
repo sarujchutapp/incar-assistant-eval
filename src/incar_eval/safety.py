@@ -57,9 +57,42 @@ def _noncat_match(gold_value: object, emitted_value: object) -> bool:
     return any(_tokens(v) == emitted_tokens for v in variants)
 
 
+#: Intensity tier -> (low, high) as a fraction of the car's adjustable range.
+#: Tunable product knob (how aggressive "crank it" is); the mechanism is fixed.
+TIER_FRACTIONS: dict[str, tuple[float, float]] = {
+    "slight": (0.08, 0.22),
+    "moderate": (0.22, 0.45),
+    "large": (0.45, 0.80),
+}
+
+
+def _intensity_band(intensity: str, range_span: float, signed: bool) -> tuple[float, float]:
+    direction, tier = intensity.split(":")
+    lo_f, hi_f = TIER_FRACTIONS[tier]
+    lo, hi = lo_f * range_span, hi_f * range_span
+    if signed and direction == "cooler":
+        return (-hi, -lo)
+    return (lo, hi)
+
+
+def effective_bands(gold: GoldRecord) -> dict[str, tuple[float, float]] | None:
+    """The bands to score this case by: explicit slot_bands, or bands derived from
+    an intensity tier relative to the car's range (climate -> temp_delta,
+    volume -> amount). None when neither applies."""
+    if gold.slot_bands:
+        return gold.slot_bands
+    if not gold.intensity or gold.car_state is None:
+        return None
+    if gold.expected_intent == "set_climate" and gold.car_state.climate_range is not None:
+        return {"temp_delta": _intensity_band(gold.intensity, gold.car_state.climate_range, signed=True)}
+    if gold.expected_intent == "adjust_volume" and gold.car_state.volume_range is not None:
+        return {"amount": _intensity_band(gold.intensity, gold.car_state.volume_range, signed=False)}
+    return None
+
+
 def slots_match(
     expected: dict[str, Any],
-    bands: dict[str, tuple[int, int]] | None,
+    bands: dict[str, tuple[float, float]] | None,
     emitted: dict[str, Any],
 ) -> bool:
     """SGD-style slot match. Categorical and numeric slots match exactly;
@@ -147,7 +180,7 @@ def is_success(gold: GoldRecord, emitted: ToolCall, routing: RoutingOutcome) -> 
     return (
         routing is RoutingOutcome.CORRECT_ACTION
         and emitted.intent == intent
-        and slots_match(gold.expected_slots, gold.slot_bands, emitted.slots)
+        and slots_match(gold.expected_slots, effective_bands(gold), emitted.slots)
     )
 
 
@@ -173,7 +206,7 @@ def classify_cost(gold: GoldRecord, emitted: ToolCall) -> CostCategory:
     action_correct = (
         acted
         and emitted.intent == intent
-        and slots_match(gold.expected_slots, gold.slot_bands, emitted.slots)
+        and slots_match(gold.expected_slots, effective_bands(gold), emitted.slots)
     )
     irreversible = intent == IRREVERSIBLE_INTENT
     silent = emitted.mode is ResponseMode.EXECUTE

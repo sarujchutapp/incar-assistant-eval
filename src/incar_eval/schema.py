@@ -71,6 +71,11 @@ def validate_record(record: GoldRecord) -> None:
         raise ValueError(f"unknown intent label: {record.expected_intent!r}")
     if record.ambiguity not in AMBIGUITY_LABELS:
         raise ValueError(f"unknown ambiguity label: {record.ambiguity!r}")
+    if record.intensity is not None:
+        if record.expected_intent not in ("set_climate", "adjust_volume"):
+            raise ValueError(f"intensity only applies to set_climate/adjust_volume, not {record.expected_intent!r}")
+        if ":" not in record.intensity or record.intensity.split(":")[1] not in ("slight", "moderate", "large"):
+            raise ValueError(f"intensity must be '<direction>:<slight|moderate|large>', got {record.intensity!r}")
     if record.expected_intent in COMMAND_INTENTS:
         allowed = set(SCHEMA[record.expected_intent].slots)
         extra = (set(record.expected_slots) | set(record.slot_bands or {})) - allowed

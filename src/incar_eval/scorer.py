@@ -15,7 +15,7 @@ from .models import (
     RoutingOutcome,
     ToolCall,
 )
-from .safety import classify_cost, expected_mode, is_success, slots_match
+from .safety import classify_cost, effective_bands, expected_mode, is_success, slots_match
 from .schema import SCHEMA
 
 _NON_ACTING_MODES = (ResponseMode.CLARIFY, ResponseMode.WARN_ALTERNATIVE)
@@ -57,8 +57,9 @@ def score_case(gold: GoldRecord, emitted: ToolCall) -> CaseOutcome:
         else expected_mode(SCHEMA[gold.expected_intent].stakes, gold.ambiguity)
     )
     routing = classify_routing(gold.expected_intent, emitted)
-    slots_exact = slots_match(gold.expected_slots, gold.slot_bands, emitted.slots)
-    f1 = 1.0 if (gold.slot_bands and slots_exact) else slot_f1(gold.expected_slots, emitted.slots)
+    bands = effective_bands(gold)
+    slots_exact = slots_match(gold.expected_slots, bands, emitted.slots)
+    f1 = 1.0 if (bands and slots_exact) else slot_f1(gold.expected_slots, emitted.slots)
     return CaseOutcome(
         gold=gold,
         emitted=emitted,
