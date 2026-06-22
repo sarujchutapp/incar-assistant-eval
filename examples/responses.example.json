@@ -1,0 +1,18 @@
+{
+  "strong": {
+    "bump the temp up to 23": {"intent": "set_climate", "slots": {"temp": 23, "zone": "all"}, "mode": "execute"},
+    "take me to the airport": {"intent": "navigate", "slots": {"destination": "airport"}, "mode": "execute"},
+    "call the office": {"intent": "call_contact", "slots": {"name": "office"}, "mode": "confirm"},
+    "text Sarah that I'll be late": {"intent": "send_message", "slots": {"contact": "Sarah", "body": "I'll be late"}, "mode": "confirm"},
+    "pop the hood": {"intent": "out_of_scope", "slots": {}},
+    "play the movie": {"intent": "play_media", "slots": {}, "mode": "warn_alternative"}
+  },
+  "weak": {
+    "bump the temp up to 23": {"intent": "set_climate", "slots": {"temp": 23, "zone": "all"}, "mode": "execute"},
+    "take me to the airport": {"intent": "navigate", "slots": {"destination": "downtown"}, "mode": "execute"},
+    "call the office": {"intent": "call_contact", "slots": {"name": "office"}, "mode": "execute"},
+    "text Sarah that I'll be late": {"intent": "send_message", "slots": {"contact": "Sara", "body": "I'll be late"}, "mode": "execute"},
+    "pop the hood": {"intent": "set_climate", "slots": {"temp": 21}},
+    "play the movie": {"intent": "play_media", "slots": {"title": "Dune", "media_type": "video"}, "mode": "execute"}
+  }
+}

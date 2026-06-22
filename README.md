@@ -17,6 +17,7 @@ python -m pip install -e ".[dev]"
 | `python -m pytest` | Run the test suite |
 | `python -m mypy` | Type-check `src/` and `tests/` (strict) |
 | `python -m incar_eval.demo` | Run the recorded-fixtures demo and print a TSR |
+| `python -m incar_eval.cli --cases C --responses R` | Run the benchmark from hand-authored JSON files (see [docs/runbook.md](docs/runbook.md)) |
 
 ## Status
 

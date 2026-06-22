@@ -5,6 +5,7 @@ Wraps each proportion in a Wilson interval, runs models on the identical case se
 paired and per-case — no Elo, no ranking model on the objective quadrant.
 """
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 
 from .client import ModelClient
@@ -41,7 +42,7 @@ def model_report(name: str, outcomes: list[CaseOutcome]) -> ModelReport:
     return ModelReport(name=name, n=len(outcomes), mean_cost=m.mean_cost, slot_f1=m.slot_f1, proportions=proportions)
 
 
-def run_models(dataset: list[GoldRecord], clients: dict[str, ModelClient]) -> dict[str, BenchmarkResult]:
+def run_models(dataset: list[GoldRecord], clients: Mapping[str, ModelClient]) -> dict[str, BenchmarkResult]:
     """Run every model on the identical (paired) case set."""
     return {name: run_benchmark(dataset, client) for name, client in clients.items()}
 
