@@ -17,7 +17,8 @@ from dataclasses import dataclass
 from .adapter import build_query_prompt, parse_tool_call
 from .client import ModelClient
 from .models import CarState, GoldRecord, ToolCall
-from .safety import CATEGORICAL_SLOTS, NONCAT_OVERLAP, token_overlap
+from .safety import NONCAT_OVERLAP, token_overlap
+from .schema import CATEGORICAL_SLOTS
 
 
 @dataclass(frozen=True)

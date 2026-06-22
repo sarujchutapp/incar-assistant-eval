@@ -13,11 +13,20 @@ Stakes = Literal["low", "high"]
 
 
 class IntentSpec:
-    def __init__(self, name: str, slots: tuple[str, ...], stakes: Stakes, description: str) -> None:
+    def __init__(
+        self,
+        name: str,
+        slots: tuple[str, ...],
+        stakes: Stakes,
+        description: str,
+        categorical: dict[str, tuple[str, ...]] | None = None,
+    ) -> None:
         self.name = name
         self.slots = slots
         self.stakes = stakes
         self.description = description
+        #: SGD-style closed-vocabulary slots -> their allowed values (possible_values).
+        self.categorical = categorical or {}
 
 
 SCHEMA: dict[str, IntentSpec] = {
@@ -25,6 +34,7 @@ SCHEMA: dict[str, IntentSpec] = {
         "set_climate", ("temp", "zone", "temp_delta"), "low",
         "Set cabin temperature. temp = absolute degrees C; temp_delta = relative change "
         "for 'warmer'/'cooler' (positive warmer, negative cooler); zone in {driver, passenger, all}.",
+        categorical={"zone": ("driver", "passenger", "all")},
     ),
     "navigate": IntentSpec(
         "navigate", ("destination",), "low",
@@ -38,10 +48,12 @@ SCHEMA: dict[str, IntentSpec] = {
         "play_media", ("title", "artist", "media_type"), "low",
         "Play audio/video from any available source or app. title = free-text of what to "
         "play (song, show, or genre like 'jazz'); media_type in {audio, video}, default audio.",
+        categorical={"media_type": ("audio", "video")},
     ),
     "adjust_volume": IntentSpec(
         "adjust_volume", ("direction", "amount"), "low",
         "Change volume. direction in {up, down, set}.",
+        categorical={"direction": ("up", "down", "set")},
     ),
     "send_message": IntentSpec(
         "send_message", ("contact", "body"), "high",
@@ -51,6 +63,12 @@ SCHEMA: dict[str, IntentSpec] = {
 
 # Single source of truth: the schema's command intents must match the constant.
 assert frozenset(SCHEMA) == COMMAND_INTENTS
+
+#: Closed-vocabulary slots, derived from the schema (not hardcoded). Matched
+#: exactly (SGD categorical slots); everything else string-valued is non-categorical.
+CATEGORICAL_SLOTS: frozenset[str] = frozenset(
+    slot for spec in SCHEMA.values() for slot in spec.categorical
+)
 
 
 def known_labels() -> frozenset[str]:
@@ -77,11 +95,19 @@ def validate_record(record: GoldRecord) -> None:
         if ":" not in record.intensity or record.intensity.split(":")[1] not in ("slight", "moderate", "large"):
             raise ValueError(f"intensity must be '<direction>:<slight|moderate|large>', got {record.intensity!r}")
     if record.expected_intent in COMMAND_INTENTS:
-        allowed = set(SCHEMA[record.expected_intent].slots)
+        spec = SCHEMA[record.expected_intent]
+        allowed = set(spec.slots)
         extra = (set(record.expected_slots) | set(record.slot_bands or {})) - allowed
         if extra:
             raise ValueError(
                 f"intent {record.expected_intent!r} has no slots {sorted(extra)}; allowed: {sorted(allowed)}"
             )
+        for slot, value in record.expected_slots.items():
+            if slot in spec.categorical:
+                for v in (value if isinstance(value, list) else [value]):
+                    if v not in spec.categorical[slot]:
+                        raise ValueError(
+                            f"slot {slot!r} value {v!r} not in possible_values {spec.categorical[slot]}"
+                        )
     elif record.expected_slots:
         raise ValueError(f"abstention label {record.expected_intent!r} must have no slots")

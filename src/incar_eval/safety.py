@@ -22,12 +22,7 @@ from .models import (
     RoutingOutcome,
     ToolCall,
 )
-from .schema import SCHEMA
-
-#: Categorical (closed-vocabulary) slots — matched exactly, per Schema-Guided
-#: Dialogue. Everything else string-valued is non-categorical and matched by
-#: normalized string match against an acceptable-value list (MultiWOZ 2.2 style).
-CATEGORICAL_SLOTS: frozenset[str] = frozenset({"zone", "direction", "media_type"})
+from .schema import CATEGORICAL_SLOTS, SCHEMA  # CATEGORICAL_SLOTS derived from the schema
 
 #: Two surface forms of a non-categorical span count as the same when their token
 #: overlap (Jaccard) reaches this — used to merge verifier variants at authoring time.

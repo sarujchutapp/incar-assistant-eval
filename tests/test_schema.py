@@ -39,3 +39,20 @@ def test_validate_rejects_unknown_intent() -> None:
 def test_validate_rejects_unknown_slot() -> None:
     with pytest.raises(ValueError):
         validate_record(GoldRecord("call mom", "call_contact", {"nickname": "mom"}))
+
+
+def test_categorical_slots_derived_from_schema() -> None:
+    from incar_eval.schema import CATEGORICAL_SLOTS
+
+    assert CATEGORICAL_SLOTS == frozenset({"zone", "media_type", "direction"})
+
+
+def test_validate_accepts_in_vocabulary_categorical_value() -> None:
+    validate_record(GoldRecord("warm the driver side", "set_climate", {"zone": "driver"}))
+
+
+def test_validate_rejects_out_of_vocabulary_categorical_value() -> None:
+    with pytest.raises(ValueError):
+        validate_record(GoldRecord("warm the back seat", "set_climate", {"zone": "backseat"}))
+    with pytest.raises(ValueError):
+        validate_record(GoldRecord("play it", "play_media", {"media_type": "hologram"}))

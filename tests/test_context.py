@@ -79,6 +79,14 @@ def test_dropped_slot_lowers_jga() -> None:
     assert outcome.per_turn_accuracy == 1.0  # both turns had the right active intent
 
 
+def test_jga_uses_normalized_matching() -> None:
+    # a case/article paraphrase of the same goal counts as correct (SGD/MultiWOZ),
+    # consistent with single-turn matching rather than raw string equality
+    turns = [Turn("take me to the airport", "navigate", {"destination": "the airport"})]
+    emissions = [ToolCall("navigate", {"destination": "Airport"})]
+    assert score_dialogue(turns, emissions).jga == 1.0
+
+
 def test_run_dialogue_uses_current_turn_response() -> None:
     case = DialogueCase(
         turns=[

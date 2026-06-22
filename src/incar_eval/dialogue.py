@@ -12,6 +12,7 @@ from typing import Any
 from .adapter import parse_tool_call
 from .client import ModelClient
 from .models import CarState, ToolCall
+from .safety import slots_match
 from .schema import schema_text
 
 SYSTEM_PROMPT = (
@@ -55,7 +56,9 @@ def build_dialogue_prompt(history: list[str], current: str, car_state: CarState 
 def score_dialogue(turns: list[Turn], emissions: list[ToolCall]) -> DialogueOutcome:
     if not turns:
         return DialogueOutcome(jga=0.0, per_turn_accuracy=0.0, emissions=emissions)
-    goal_correct = sum(e.slots == t.expected_goal for t, e in zip(turns, emissions))
+    # JGA uses the SGD/MultiWOZ normalized matching (categorical exact, non-categorical
+    # normalized) — the same matcher as single-turn, so a paraphrase scores consistently.
+    goal_correct = sum(slots_match(t.expected_goal, None, e.slots) for t, e in zip(turns, emissions))
     intent_correct = sum(e.intent == t.expected_intent for t, e in zip(turns, emissions))
     return DialogueOutcome(
         jga=goal_correct / len(turns),
