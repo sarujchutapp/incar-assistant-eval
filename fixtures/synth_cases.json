@@ -1,26 +1,265 @@
 [
-  {"utterance": "Hey, set the AC to 68 degrees", "expected_intent": "set_climate", "expected_slots": {"temp": 20, "zone": "all"}, "ambiguity": "clear"},
-  {"utterance": "Navigate to the nearest Starbucks", "expected_intent": "navigate", "expected_slots": {"destination": "nearest Starbucks"}, "ambiguity": "clear"},
-  {"utterance": "Call Sarah", "expected_intent": "call_contact", "expected_slots": {"name": "Sarah"}, "ambiguity": "clear"},
-  {"utterance": "Play some jazz", "expected_intent": "play_media", "expected_slots": {"title": "jazz", "media_type": "audio"}, "ambiguity": "clear"},
-  {"utterance": "Turn the volume up to 15", "expected_intent": "adjust_volume", "expected_slots": {"direction": "set", "amount": 15}, "ambiguity": "clear"},
-  {"utterance": "Text Mike that I'm running about ten minutes late", "expected_intent": "send_message", "expected_slots": {"contact": "Mike", "body": "I'm running about ten minutes late"}, "ambiguity": "clear"},
-  {"utterance": "Make it a bit warmer in here", "expected_intent": "set_climate", "expected_slots": {}, "ambiguity": "defaultable", "slot_bands": {"temp_delta": [1, 2]}},
-  {"utterance": "Get me directions home", "expected_intent": "navigate", "expected_slots": {"destination": "home"}, "ambiguity": "clear"},
-  {"utterance": "Crank the volume way down, I can barely think", "expected_intent": "adjust_volume", "expected_slots": {"direction": "down"}, "ambiguity": "defaultable"},
-  {"utterance": "Send a message to Mom saying I just left", "expected_intent": "send_message", "expected_slots": {"contact": "Mom", "body": "I just left"}, "ambiguity": "clear"},
-  {"utterance": "Call him back", "expected_intent": "call_contact", "expected_slots": {}, "ambiguity": "ambiguous"},
-  {"utterance": "Set the temperature", "expected_intent": "set_climate", "expected_slots": {}, "ambiguity": "ambiguous"},
-  {"utterance": "Play that song again", "expected_intent": "play_media", "expected_slots": {"media_type": "audio"}, "ambiguity": "clear"},
-  {"utterance": "Send her the address", "expected_intent": "send_message", "expected_slots": {}, "ambiguity": "ambiguous"},
-  {"utterance": "You know, I keep meaning to call my dentist one of these days", "expected_intent": "none", "expected_slots": {}, "ambiguity": "clear"},
-  {"utterance": "Ugh, why is there always traffic on this road", "expected_intent": "none", "expected_slots": {}, "ambiguity": "clear"},
-  {"utterance": "I really should text grandma more often", "expected_intent": "none", "expected_slots": {}, "ambiguity": "clear"},
-  {"utterance": "Man, I have no idea where I'm going with my life right now", "expected_intent": "none", "expected_slots": {}, "ambiguity": "clear"},
-  {"utterance": "Open the sunroof a little", "expected_intent": "out_of_scope", "expected_slots": {}, "ambiguity": "clear"},
-  {"utterance": "Turn on the seat warmers", "expected_intent": "out_of_scope", "expected_slots": {}, "ambiguity": "clear"},
-  {"utterance": "Can you park this thing for me", "expected_intent": "out_of_scope", "expected_slots": {}, "ambiguity": "clear"},
-  {"utterance": "Put on that YouTube video of the concert from last week", "expected_intent": "play_media", "expected_slots": {}, "ambiguity": "ambiguous", "car_state": {"vehicle_motion": "moving"}},
-  {"utterance": "Pull up Netflix, I want to watch something", "expected_intent": "play_media", "expected_slots": {"media_type": "video"}, "ambiguity": "clear", "car_state": {"vehicle_motion": "moving"}},
-  {"utterance": "Play the next episode, I was in the middle of it", "expected_intent": "play_media", "expected_slots": {"media_type": "video"}, "ambiguity": "clear", "car_state": {"vehicle_motion": "moving"}}
+  {
+    "utterance": "Hey, set the AC to 68 degrees",
+    "expected_intent": "set_climate",
+    "expected_slots": {
+      "temp": 20,
+      "zone": "all"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Navigate to the nearest Starbucks",
+    "expected_intent": "navigate",
+    "expected_slots": {
+      "destination": "nearest Starbucks"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Call Sarah",
+    "expected_intent": "call_contact",
+    "expected_slots": {
+      "name": "Sarah"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Play some jazz",
+    "expected_intent": "play_media",
+    "expected_slots": {
+      "title": "jazz",
+      "media_type": "audio"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Turn the volume up to 15",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "set",
+      "amount": 15
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Text Mike that I'm running about ten minutes late",
+    "expected_intent": "send_message",
+    "expected_slots": {
+      "contact": "Mike",
+      "body": "I'm running about ten minutes late"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Make it a bit warmer in here",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "defaultable",
+    "slot_bands": {
+      "temp_delta": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "utterance": "Get me directions home",
+    "expected_intent": "navigate",
+    "expected_slots": {
+      "destination": "home"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Crank the volume way down, I can barely think",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "down"
+    },
+    "ambiguity": "defaultable"
+  },
+  {
+    "utterance": "Send a message to Mom saying I just left",
+    "expected_intent": "send_message",
+    "expected_slots": {
+      "contact": "Mom",
+      "body": "I just left"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Call him back",
+    "expected_intent": "call_contact",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Set the temperature",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Play that song again",
+    "expected_intent": "play_media",
+    "expected_slots": {
+      "media_type": "audio"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Send her the address",
+    "expected_intent": "send_message",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "You know, I keep meaning to call my dentist one of these days",
+    "expected_intent": "none",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Ugh, why is there always traffic on this road",
+    "expected_intent": "none",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "I really should text grandma more often",
+    "expected_intent": "none",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Man, I have no idea where I'm going with my life right now",
+    "expected_intent": "none",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Open the sunroof a little",
+    "expected_intent": "out_of_scope",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Turn on the seat warmers",
+    "expected_intent": "out_of_scope",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Can you park this thing for me",
+    "expected_intent": "out_of_scope",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Put on that YouTube video of the concert from last week",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous",
+    "car_state": {
+      "vehicle_motion": "moving"
+    }
+  },
+  {
+    "utterance": "Pull up Netflix, I want to watch something",
+    "expected_intent": "play_media",
+    "expected_slots": {
+      "media_type": "video"
+    },
+    "ambiguity": "clear",
+    "car_state": {
+      "vehicle_motion": "moving"
+    }
+  },
+  {
+    "utterance": "Play the next episode, I was in the middle of it",
+    "expected_intent": "play_media",
+    "expected_slots": {
+      "media_type": "video"
+    },
+    "ambiguity": "clear",
+    "car_state": {
+      "vehicle_motion": "moving"
+    }
+  },
+  {
+    "utterance": "Oh man, I completely forgot to eat today. I'm starving.",
+    "expected_intent": "none",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Roll down the windows, it smells weird in here.",
+    "expected_intent": "out_of_scope",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "It's roasting, dial it back like half a degree maybe.",
+    "expected_intent": "set_climate",
+    "expected_slots": {
+      "temp_delta": -0.5,
+      "zone": "all"
+    },
+    "ambiguity": "defaultable"
+  },
+  {
+    "utterance": "Oh wow, traffic is insane right now. Why is everyone going this direction?",
+    "expected_intent": "none",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Open the sunroof, it's gorgeous outside.",
+    "expected_intent": "out_of_scope",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Call Dr. Patel's office right now and tell them I need to speak with someone urgently.",
+    "expected_intent": "call_contact",
+    "expected_slots": {
+      "name": "Dr. Patel's office"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "I wonder if I should've taken the other route this morning.",
+    "expected_intent": "none",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Charge this thing to at least eighty percent before we get to the hotel.",
+    "expected_intent": "out_of_scope",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Call Priya and when she picks up tell her the meeting got moved to Thursday.",
+    "expected_intent": "call_contact",
+    "expected_slots": {
+      "name": "Priya"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Get directions to the closest urgent care, my kid is running a fever.",
+    "expected_intent": "navigate",
+    "expected_slots": {
+      "destination": "closest urgent care"
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Turn the wipers on, this drizzle is getting annoying.",
+    "expected_intent": "out_of_scope",
+    "expected_slots": {},
+    "ambiguity": "clear"
+  }
 ]

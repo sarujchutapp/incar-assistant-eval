@@ -1,1 +1,238 @@
-[]
+[
+  {
+    "utterance": "Ugh, can you just turn it down a bit? Like a tiny bit, it's not that overwhelming.",
+    "status": "flagged_disagreement",
+    "reason": "no consensus",
+    "candidates": [
+      {
+        "verifier": "opus",
+        "intent": "adjust_volume",
+        "slots": {
+          "direction": "down",
+          "amount": "small"
+        }
+      },
+      {
+        "verifier": "haiku",
+        "intent": "adjust_volume",
+        "slots": {
+          "direction": "down",
+          "amount": 1
+        }
+      }
+    ]
+  },
+  {
+    "utterance": "I need to get there before the pharmacy closes, can you route me?",
+    "status": "flagged_manual",
+    "reason": "ambiguous cell",
+    "candidates": []
+  },
+  {
+    "utterance": "Crank up the heat, I can literally see my breath in here.",
+    "status": "flagged_disagreement",
+    "reason": "no consensus",
+    "candidates": [
+      {
+        "verifier": "opus",
+        "intent": "set_climate",
+        "slots": {
+          "temp_delta": 5,
+          "zone": "all"
+        }
+      },
+      {
+        "verifier": "haiku",
+        "intent": "set_climate",
+        "slots": {
+          "zone": "all",
+          "temp_delta": 3
+        }
+      }
+    ]
+  },
+  {
+    "utterance": "Call the restaurant and let them know we're running about fifteen minutes late.",
+    "status": "flagged_manual",
+    "reason": "ambiguous cell",
+    "candidates": []
+  },
+  {
+    "utterance": "I want to watch something on the way there.",
+    "status": "flagged_manual",
+    "reason": "ambiguous cell",
+    "candidates": []
+  },
+  {
+    "utterance": "Dial Marcus's work number, not his cell.",
+    "status": "flagged_disagreement",
+    "reason": "no consensus",
+    "candidates": [
+      {
+        "verifier": "opus",
+        "intent": "call_contact",
+        "slots": {
+          "name": "Marcus (work)"
+        }
+      },
+      {
+        "verifier": "haiku",
+        "intent": "call_contact",
+        "slots": {
+          "name": "Marcus"
+        }
+      }
+    ]
+  },
+  {
+    "utterance": "Navigate to the address my wife texted me.",
+    "status": "flagged_manual",
+    "reason": "ambiguous cell",
+    "candidates": []
+  },
+  {
+    "utterance": "Tell him I'm stuck in traffic and I'll explain everything when I get there.",
+    "status": "flagged_manual",
+    "reason": "ambiguous cell",
+    "candidates": []
+  },
+  {
+    "utterance": "Put on the game, I don't want to miss any of it.",
+    "status": "flagged_manual",
+    "reason": "ambiguous cell",
+    "candidates": []
+  },
+  {
+    "utterance": "Turn the heat down just slightly, I'm getting a little warm.",
+    "status": "flagged_disagreement",
+    "reason": "no consensus",
+    "candidates": [
+      {
+        "verifier": "opus",
+        "intent": "set_climate",
+        "slots": {
+          "temp_delta": -2,
+          "zone": "all"
+        }
+      },
+      {
+        "verifier": "haiku",
+        "intent": "set_climate",
+        "slots": {
+          "zone": "all",
+          "temp_delta": -1
+        }
+      }
+    ]
+  },
+  {
+    "utterance": "This song is way too quiet, bump it up way more.",
+    "status": "flagged_disagreement",
+    "reason": "no consensus",
+    "candidates": [
+      {
+        "verifier": "opus",
+        "intent": "adjust_volume",
+        "slots": {
+          "direction": "up",
+          "amount": "large"
+        }
+      },
+      {
+        "verifier": "haiku",
+        "intent": "adjust_volume",
+        "slots": {
+          "direction": "up",
+          "amount": 3
+        }
+      }
+    ]
+  },
+  {
+    "utterance": "Route me somewhere I can grab a quick bite without getting off the highway.",
+    "status": "flagged_manual",
+    "reason": "ambiguous cell",
+    "candidates": []
+  },
+  {
+    "utterance": "Stream that documentary from last night, I only got halfway through.",
+    "status": "flagged_manual",
+    "reason": "ambiguous cell",
+    "candidates": []
+  },
+  {
+    "utterance": "Send a message to my mom saying I landed safely and I'll call her tonight.",
+    "status": "flagged_disagreement",
+    "reason": "no consensus",
+    "candidates": [
+      {
+        "verifier": "opus",
+        "intent": "send_message",
+        "slots": {
+          "contact": "mom",
+          "body": "I landed safely and I'll call her tonight."
+        }
+      },
+      {
+        "verifier": "haiku",
+        "intent": "send_message",
+        "slots": {
+          "contact": "mom",
+          "body": "I landed safely and I'll call you tonight"
+        }
+      }
+    ]
+  },
+  {
+    "utterance": "Take me to the address on that confirmation email.",
+    "status": "flagged_manual",
+    "reason": "ambiguous cell",
+    "candidates": []
+  },
+  {
+    "utterance": "It's freezing back here, seriously crank it.",
+    "status": "flagged_disagreement",
+    "reason": "no consensus",
+    "candidates": [
+      {
+        "verifier": "opus",
+        "intent": "set_climate",
+        "slots": {
+          "temp_delta": 5,
+          "zone": "passenger"
+        }
+      },
+      {
+        "verifier": "haiku",
+        "intent": "set_climate",
+        "slots": {
+          "zone": "all",
+          "temp_delta": 3
+        }
+      }
+    ]
+  },
+  {
+    "utterance": "Queue up some music, anything's fine, I just need something on.",
+    "status": "flagged_disagreement",
+    "reason": "no consensus",
+    "candidates": [
+      {
+        "verifier": "opus",
+        "intent": "play_media",
+        "slots": {
+          "title": "any music",
+          "media_type": "audio"
+        }
+      },
+      {
+        "verifier": "haiku",
+        "intent": "play_media",
+        "slots": {
+          "title": "music",
+          "media_type": "audio"
+        }
+      }
+    ]
+  }
+]
