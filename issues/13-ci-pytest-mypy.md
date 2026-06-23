@@ -1,4 +1,4 @@
-Status: done
+Status: wontfix
 
 # CI: run pytest + mypy on merge requests
 
@@ -40,3 +40,18 @@ jobs (`pytest`, `mypy`), gated to `merge_request_event`. `before_script` does
 Note: the runner's `pip install` step does reach PyPI to provision deps — that's
 runner setup, not the evaluation. The "no network (fixtures only)" criterion is
 about the suite not making live model/API calls, which holds.
+
+### Reverted — 2026-06-23 (wontfix)
+
+`.gitlab-ci.yml` removed at the maintainer's request. Two problems with it in
+practice:
+1. The repo's workflow is **direct pushes to `main`** (no merge requests), but the
+   jobs were gated to `merge_request_event`. Every push to main therefore produced
+   a pipeline with **zero matching jobs**, which GitLab marks **failed** — sending a
+   "Failed pipeline for main" email on each push. Not a test failure (suite is green).
+2. The maintainer does not want GitLab CI automation.
+
+Could be revived later by running the jobs on default-branch pushes too
+(`if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH`),
+but only if CI is wanted. The feedback loops still run locally
+(`python -m pytest`, `python -m mypy`).
