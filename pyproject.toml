@@ -11,6 +11,7 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "mypy>=1.8"]
+live = ["anthropic>=0.40"]  # only for LiveModelClient; never needed by tests/CI
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -23,3 +24,8 @@ testpaths = ["tests"]
 files = ["src", "tests"]
 python_version = "3.12"
 strict = true
+
+# anthropic is an optional dependency (the `live` extra), not installed in CI.
+[[tool.mypy.overrides]]
+module = "anthropic.*"
+ignore_missing_imports = true
