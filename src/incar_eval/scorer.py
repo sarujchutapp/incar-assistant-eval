@@ -37,16 +37,22 @@ def classify_routing(expected_intent: str, emitted: ToolCall) -> RoutingOutcome:
 
 
 def slot_f1(gold_slots: dict[str, Any], pred_slots: dict[str, Any]) -> float:
-    """F1 over (slot, value) pairs — both name and value must match."""
-    gold_pairs = set(gold_slots.items())
-    pred_pairs = set(pred_slots.items())
-    if not gold_pairs and not pred_pairs:
+    """F1 over (slot, value) pairs — both name and value must match.
+
+    A gold value may be an acceptable-value list (MultiWOZ 2.2); the pair counts
+    as matched when the predicted value is any accepted variant.
+    """
+    if not gold_slots and not pred_slots:
         return 1.0
-    tp = len(gold_pairs & pred_pairs)
+
+    def _hit(gold_val: Any, pred_val: Any) -> bool:
+        return pred_val in gold_val if isinstance(gold_val, list) else gold_val == pred_val
+
+    tp = sum(1 for k in gold_slots.keys() & pred_slots.keys() if _hit(gold_slots[k], pred_slots[k]))
     if tp == 0:
         return 0.0
-    precision = tp / len(pred_pairs)
-    recall = tp / len(gold_pairs)
+    precision = tp / len(pred_slots)
+    recall = tp / len(gold_slots)
     return 2 * precision * recall / (precision + recall)
 
 

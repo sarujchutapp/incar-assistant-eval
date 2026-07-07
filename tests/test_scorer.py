@@ -21,6 +21,14 @@ def test_wrong_slot_gives_partial_f1_and_fails() -> None:
     assert not outcome.success
 
 
+def test_slot_f1_handles_acceptable_value_list() -> None:
+    # Gold value is an acceptable-value list (MultiWOZ 2.2). A wrong prediction
+    # must score, not crash; a listed variant must count as a hit.
+    gold = GoldRecord("dial marcus", "call_contact", {"name": ["Marcus (work)", "Marcus"]})
+    assert score_case(gold, ToolCall("call_contact", {"name": "Bob"})).slot_f1 == 0.0
+    assert score_case(gold, ToolCall("call_contact", {"name": "Marcus"})).slot_f1 == 1.0
+
+
 def test_wrong_intent_given_it_acted() -> None:
     gold = GoldRecord("turn up the AC", "set_climate", {"temp": 22})
     outcome = score_case(gold, ToolCall("navigate", {"destination": "home"}))
