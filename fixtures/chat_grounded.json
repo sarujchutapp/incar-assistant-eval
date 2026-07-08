@@ -58,5 +58,165 @@
     "question": "Can I find somewhere to charge nearby?",
     "context": "Nearest fast charger: 12 miles away.",
     "fact": "12 miles"
+  },
+  {
+    "question": "How much longer until we get there?",
+    "context": "Navigation: destination Riverside Mall, ETA 17 minutes, distance 9 miles.",
+    "fact": "17 minutes"
+  },
+  {
+    "question": "How far is the mall from here?",
+    "context": "Navigation: destination Riverside Mall, ETA 17 minutes, distance 9 miles.",
+    "fact": "9 miles"
+  },
+  {
+    "question": "When am I expected to arrive?",
+    "context": "Trip: departed 3:10 PM, estimated arrival 3:52 PM.",
+    "fact": "3:52 PM"
+  },
+  {
+    "question": "How far can I still drive on this tank?",
+    "context": "Fuel: 6.2 gallons remaining, estimated range 148 miles.",
+    "fact": "148 miles"
+  },
+  {
+    "question": "What's my charge sitting at?",
+    "context": "Battery: 63 percent, estimated range 210 km.",
+    "fact": "63 percent"
+  },
+  {
+    "question": "How much range do I have left on the battery?",
+    "context": "Battery: 63 percent, estimated range 210 km.",
+    "fact": "210 km"
+  },
+  {
+    "question": "How fast am I going right now?",
+    "context": "Speed: current 68 mph, limit 75 mph.",
+    "fact": "68 mph"
+  },
+  {
+    "question": "What's the speed limit on this road?",
+    "context": "Speed: current 68 mph, limit 75 mph.",
+    "fact": "75 mph"
+  },
+  {
+    "question": "What's my next turn?",
+    "context": "Next maneuver: turn left onto Cedar Avenue in 400 meters.",
+    "fact": "turn left onto Cedar Avenue"
+  },
+  {
+    "question": "How far until I need to do anything?",
+    "context": "Next maneuver: turn left onto Cedar Avenue in 400 meters.",
+    "fact": "400 meters"
+  },
+  {
+    "question": "What's the weather like where I'm headed?",
+    "context": "Destination weather: 12 degrees, light rain, wind 15 km/h.",
+    "fact": "12 degrees"
+  },
+  {
+    "question": "Is it going to rain at my destination?",
+    "context": "Destination weather: 12 degrees, light rain, wind 15 km/h.",
+    "fact": "light rain"
+  },
+  {
+    "question": "How much is traffic slowing me down?",
+    "context": "Traffic: 8 minute delay on Route 12 from roadwork.",
+    "fact": "8 minutes"
+  },
+  {
+    "question": "Which road has the holdup?",
+    "context": "Traffic: 8 minute delay on Route 12 from roadwork.",
+    "fact": "Route 12"
+  },
+  {
+    "question": "When does the nearest pharmacy close?",
+    "context": "Nearest pharmacy: GreenLeaf Pharmacy, closes at 9 PM, 1.4 miles away.",
+    "fact": "9 PM"
+  },
+  {
+    "question": "What's the closest pharmacy called?",
+    "context": "Nearest pharmacy: GreenLeaf Pharmacy, closes at 9 PM, 1.4 miles away.",
+    "fact": "GreenLeaf Pharmacy"
+  },
+  {
+    "question": "How far is that pharmacy?",
+    "context": "Nearest pharmacy: GreenLeaf Pharmacy, closes at 9 PM, 1.4 miles away.",
+    "fact": "1.4 miles"
+  },
+  {
+    "question": "What's the cabin set to right now?",
+    "context": "Climate: cabin set to 21 degrees, fan speed 3.",
+    "fact": "21 degrees"
+  },
+  {
+    "question": "What number is the fan on?",
+    "context": "Climate: cabin set to 21 degrees, fan speed 3.",
+    "fact": "fan speed 3"
+  },
+  {
+    "question": "How many unread messages do I have?",
+    "context": "Messages: 4 unread, most recent from Priya.",
+    "fact": "4 unread"
+  },
+  {
+    "question": "Who texted me last?",
+    "context": "Messages: 4 unread, most recent from Priya.",
+    "fact": "Priya"
+  },
+  {
+    "question": "What's playing right now?",
+    "context": "Media: now playing 'Midnight City' by M83, 2 minutes left.",
+    "fact": "Midnight City"
+  },
+  {
+    "question": "How much of this track is left?",
+    "context": "Media: now playing 'Midnight City' by M83, 2 minutes left.",
+    "fact": "2 minutes"
+  },
+  {
+    "question": "What's my tire pressure looking like?",
+    "context": "Tires: front-left 32 psi, others nominal.",
+    "fact": "32 psi"
+  },
+  {
+    "question": "How many miles since my last service?",
+    "context": "Maintenance: 4200 miles since last service, next due in 800 miles.",
+    "fact": "4200 miles"
+  },
+  {
+    "question": "When's my next service due?",
+    "context": "Maintenance: 4200 miles since last service, next due in 800 miles.",
+    "fact": "800 miles"
+  },
+  {
+    "question": "What time does my meeting start?",
+    "context": "Calendar: next event 'Design sync' at 4:30 PM.",
+    "fact": "4:30 PM"
+  },
+  {
+    "question": "What's my next calendar event?",
+    "context": "Calendar: next event 'Design sync' at 4:30 PM.",
+    "fact": "Design sync"
+  },
+  {
+    "question": "How cold is it outside?",
+    "context": "Exterior temperature: 3 degrees, road surface dry.",
+    "fact": "3 degrees"
+  },
+  {
+    "question": "What's the road surface like?",
+    "context": "Exterior temperature: 3 degrees, road surface dry.",
+    "fact": "dry"
+  },
+  {
+    "question": "How many miles are on the odometer?",
+    "context": "Odometer: 58230 miles.",
+    "fact": "58230 miles"
+  },
+  {
+    "question": "How long has this drive been?",
+    "context": "Trip: elapsed 42 minutes, 31 miles covered.",
+    "fact": "42 minutes"
   }
 ]
