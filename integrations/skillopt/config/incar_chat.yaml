@@ -1,0 +1,40 @@
+# Copy to <skillopt>/configs/incar_chat/default.yaml
+_base_: ../_base_/default.yaml
+
+model:
+  reasoning_effort: ""   # target/optimizer models come from --target_model / --optimizer_model
+                         # (Ollama via the OpenAI-compatible endpoint in .env, same as the command env)
+
+train:
+  num_epochs: 4
+  train_size: 0
+  batch_size: 8
+  accumulation: 1
+  seed: 42
+
+gradient:
+  minibatch_size: 4
+  merge_batch_size: 4
+
+optimizer:
+  learning_rate: 4
+
+evaluation:
+  use_gate: true
+  gate_metric: mixed   # tiny val split -> a pure `hard` gate can reject every candidate;
+  gate_mixed_weight: 0.5   # blend faithfulness (hard) with relevancy (soft). Switch to
+                           # `hard` once the grounded corpus grows.
+  sel_env_num: 0
+  test_env_num: 0
+  eval_test: true
+
+env:
+  name: incar_chat
+  skill_init: skillopt/envs/incar_chat/skills/initial.md
+  split_mode: split_dir
+  split_dir: data/incar_chat_split
+  data_path: ""
+  split_output_dir: ""
+  max_completion_tokens: 1024
+  workers: 8
+  limit: 0

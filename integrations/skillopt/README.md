@@ -10,6 +10,18 @@ the success rate on the held-out test split? It is *not* the trustworthy run: th
 corpus is only ~70 cases (issue #10 grows it to ~400; issue #9 is the human anchor
 that guards against the optimizer gaming the verifier).
 
+## Two envs
+
+- **`envs/incar_toolcalling`** — the command/control quadrant, scored by `score_case`
+  (config `config/default.yaml`, splits via `build_splits.py`). This README's contract
+  section describes it.
+- **`envs/incar_chat`** — the grounded informational quadrant, scored by `score_chat_case`
+  (faithfulness gate; config `config/incar_chat.yaml`, splits via `build_chat_splits.py`).
+  Same contract shape: skill = system prompt, `context + question` = user message,
+  `hard = faithful`, `soft = relevancy`. Register `IncarChatAdapter` as `incar_chat` in
+  `scripts/train.py` and run `--config configs/incar_chat/default.yaml`. Grounded corpus
+  is smoke-scale until it grows (GitLab #16).
+
 ## Contract mapping (verified against SkillOpt `main`)
 
 | SkillOpt piece | This env |
