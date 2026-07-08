@@ -393,5 +393,259 @@
     "expected_intent": "navigate",
     "expected_slots": {},
     "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Play that thing I had on yesterday.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Put on the usual.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Play her favorite.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Can you put on that one song, you know the one I mean?",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Play what we were listening to earlier at lunch.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Put on something from that band we saw last month.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Play the track you recommended the other day.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Throw on whatever she likes.",
+    "expected_intent": "play_media",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Can you do something about the volume?",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "The sound level is really bugging me right now.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "This volume just isn't working for me.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Hey, sort out the audio level, would you?",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Something's off with how loud this is.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "The volume's driving me nuts, handle it.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Do whatever you need to with the volume.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "That's not the right volume at all.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Do something about the temperature, it's miserable in here.",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Can you fix the climate? It's not right.",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "The temperature's really bothering me.",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Sort out the AC, it's all wrong.",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "It's way too hot up front and freezing in the back, deal with it.",
+    "expected_intent": "set_climate",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Give her a ring.",
+    "expected_intent": "call_contact",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Call them back, would you?",
+    "expected_intent": "call_contact",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Can you call the place we ordered from last night?",
+    "expected_intent": "call_contact",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Dial that number he texted me.",
+    "expected_intent": "call_contact",
+    "expected_slots": {},
+    "ambiguity": "ambiguous"
+  },
+  {
+    "utterance": "Set the volume to 20.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "set",
+      "amount": 20
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Turn it down by three notches.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "down",
+      "amount": 3
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Bump the sound up five.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "up",
+      "amount": 5
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Put it at eighteen, that's usually good.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "set",
+      "amount": 18
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Knock the volume down to six, the kids are asleep.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "set",
+      "amount": 6
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Louder, go up by ten.",
+    "expected_intent": "adjust_volume",
+    "expected_slots": {
+      "direction": "up",
+      "amount": 10
+    },
+    "ambiguity": "clear"
+  },
+  {
+    "utterance": "Put on some music.",
+    "expected_intent": "play_media",
+    "expected_slots": {
+      "media_type": "audio",
+      "title": [
+        "music",
+        "some music"
+      ]
+    },
+    "ambiguity": "defaultable"
+  },
+  {
+    "utterance": "Play something, doesn't matter what.",
+    "expected_intent": "play_media",
+    "expected_slots": {
+      "media_type": "audio",
+      "title": [
+        "something",
+        "anything",
+        "music"
+      ]
+    },
+    "ambiguity": "defaultable"
+  },
+  {
+    "utterance": "Can you throw on a podcast?",
+    "expected_intent": "play_media",
+    "expected_slots": {
+      "media_type": "audio",
+      "title": [
+        "a podcast",
+        "podcast"
+      ]
+    },
+    "ambiguity": "defaultable"
+  },
+  {
+    "utterance": "Just put some tunes on, whatever.",
+    "expected_intent": "play_media",
+    "expected_slots": {
+      "media_type": "audio",
+      "title": [
+        "tunes",
+        "some tunes",
+        "music"
+      ]
+    },
+    "ambiguity": "defaultable"
   }
 ]

@@ -1,4 +1,4 @@
-Status: ready-for-agent
+Status: done
 
 # Grow the command corpus toward ~400 via LLM synthesis (fill gap cells)
 
@@ -73,3 +73,40 @@ See `reserch/corpus_design.md`, `reserch/standards_alignment.md`, `reserch/bench
 ## Blocked by
 
 None. `synth.py` is on `main`. Scripted synthesis needs `ANTHROPIC_API_KEY` + `anthropic`; otherwise generate with a non-llama chat model and use `filter_candidates`.
+
+## Comments
+
+### Done — 2026-07-08
+
+Filled all six gap cells; command corpus 67 → 102 cases (`synth_cases.json` 49 → 84).
+
+**Path taken:** no live `ANTHROPIC_API_KEY` in this environment, so used the issue's
+documented alternative — candidates drafted by Claude (a non-llama family, distinct
+from the llama3 target) and gated through the real `incar_eval.synth.filter_candidates`
+(schema-validate + dedupe vs the whole corpus) before promotion. The
+`synth.py`/`test_synth.py` helper was still untracked; committed alongside this growth.
+
+**Added (all human/Claude-reviewed, then filter-gated):**
+
+- `play_media/ambiguous` +8, `adjust_volume/ambiguous` +8, `set_climate/ambiguous` +5,
+  `call_contact/ambiguous` +4 — ambiguous authored as unknown-referent / unknown-direction
+  (`expected_slots={}`, success = `mode: clarify`).
+- `adjust_volume/clear` +6 (direction + amount both stated).
+- `play_media/defaultable` +4 (media_type unstated → audio default, generic title with
+  acceptable-value variants).
+
+**Verified:**
+
+- [x] Six gap cells at/above suggested counts, `filter_candidates`-gated
+- [x] Every new case passes `validate_record`; no utterance shared across the three files
+- [x] No new `*/defaultable` for send_message/call_contact/navigate; `play_media/clear` not padded
+- [x] `flagged_for_human.json` left empty (drafted → gated → promoted directly)
+- [x] `build_splits.py` runs; val mirrors the mix (ambiguous=6, clear=5, defaultable=2, none=1, out_of_scope=1)
+- [x] Each new case is *winnable*: intended ideal response scores `success=True`, `cost=CORRECT`
+- [x] `python -m pytest` (131) + `python -m mypy` (36 files) green
+
+**Note for next iteration:** synth is now ambiguous-heavy (26 train). Toward the ~400
+target, future passes should add more `clear`/`defaultable` command variety and more
+abstention (`none`/`out_of_scope`) so the train mix isn't dominated by clarify cases.
+A final human pass over the Claude-authored cases is still advisable before using these
+in a published eval.
