@@ -1,0 +1,30 @@
+# LiteLLM proxy — a HARD, real-time $ cap in front of AWS Bedrock for the SkillOpt
+# optimizer. SkillOpt talks only to this proxy (localhost); the proxy is the one
+# thing holding AWS creds and the one thing that stops the run at the cap.
+#
+# Run (in a venv with `pip install 'litellm[proxy]'` and AWS creds on the boto3
+# chain — env vars or an AWS profile):
+#     litellm --config litellm_config.yaml
+# Proxy comes up on http://localhost:4000 ; SkillOpt points its optimizer there.
+
+model_list:
+  - model_name: bedrock-sonnet          # alias SkillOpt uses as --optimizer_model
+    litellm_params:
+      # VERIFY the exact id for your account/region:
+      #   aws bedrock list-foundation-models --query "modelSummaries[?contains(modelId,'claude')].modelId"
+      model: bedrock/anthropic.claude-sonnet-4-6-v1:0   # <-- placeholder; set your region's Sonnet id
+      aws_region_name: us-east-1                        # <-- your Bedrock region
+      max_tokens: 2048                                  # per-call OUTPUT cap (bounds worst-case per call)
+      rpm: 20                                           # requests/min ceiling
+      tpm: 40000                                        # tokens/min ceiling
+
+litellm_settings:
+  # THE HARD CAP. When cumulative spend crosses this, calls return a
+  # BudgetExceededError *before* Bedrock is billed further.
+  # START AT 1 to PROVE the cap fires, then raise. (Confirm the key name against
+  # your LiteLLM version — `litellm --version`; global-budget syntax has moved.)
+  max_budget: 1            # USD
+  budget_duration: 30d     # window the cap resets over
+
+general_settings:
+  master_key: sk-litellm-CHANGEME   # set your own; this is the api_key SkillOpt sends to the proxy
