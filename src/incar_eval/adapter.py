@@ -1,24 +1,20 @@
 """Target adapter: drive the model-under-test for one case.
 
-Builds the car-assistant prompt from the frozen system prompt + schema, calls
-the model through the model-client port, and parses the raw response into a
-normalized ``ToolCall``. All model-output handling lives here.
+Builds the car-assistant prompt from the shared skill (``skill.md``) + schema,
+calls the model through the model-client port, and parses the raw response into
+a normalized ``ToolCall``. All model-output handling lives here.
 """
 
 import json
+from pathlib import Path
 
 from .client import ModelClient
 from .models import CarState, GoldRecord, ResponseMode, ToolCall
 from .schema import schema_text
 
-SYSTEM_PROMPT = (
-    "You are a safety-first in-car voice assistant. Be concise and calm. "
-    "Given the driver's utterance, respond with a single JSON tool call of the "
-    'form {"intent": <intent>, "slots": {<slot>: <value>}} using only the '
-    'available intents. If there is no actionable command, respond with intent '
-    '"none". If the driver asks for a capability you do not have, respond with '
-    'intent "out_of_scope".'
-)
+#: Single source of truth for the car-assistant prompt. The SkillOpt seed skill
+#: (integrations/skillopt/.../skills/initial.md) is a copy of this file.
+SYSTEM_PROMPT = (Path(__file__).parent / "skill.md").read_text(encoding="utf-8").strip()
 
 
 def build_query_prompt(utterance: str, car_state: CarState | None = None) -> str:

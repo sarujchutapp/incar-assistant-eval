@@ -18,7 +18,12 @@ that guards against the optimizer gaming the verifier).
 | `dataloader.py` → `load_split_items` | reads each split's `items.json`, keeps full case dicts |
 | `rollout.py` → `run_batch` | `chat_target(skill, user)` per case, then delegates scoring |
 | `evaluator.py` → `evaluate` | `score_case`; `hard = 1.0 if success`, `soft = 0.5*intent + 0.5*slot_f1` |
-| skill being optimized | `skills/initial.md` (= current `SYSTEM_PROMPT`) |
+| skill being optimized | `skills/initial.md` — a **copy of `src/incar_eval/skill.md`** (the single source of truth, also loaded by the benchmark as `SYSTEM_PROMPT`) |
+
+> **Single-source prompt:** the car-assistant prompt lives in `src/incar_eval/skill.md`.
+> The benchmark loads it (`adapter.SYSTEM_PROMPT`) and this env's `skills/initial.md`
+> is a copy. Edit `skill.md` only; re-sync with
+> `cp src/incar_eval/skill.md .../skills/initial.md`.
 
 ## Setup
 
