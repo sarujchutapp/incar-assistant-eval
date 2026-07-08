@@ -10,17 +10,25 @@ the success rate on the held-out test split? It is *not* the trustworthy run: th
 corpus is only ~70 cases (issue #10 grows it to ~400; issue #9 is the human anchor
 that guards against the optimizer gaming the verifier).
 
-## Two envs
+## Three envs
 
-- **`envs/incar_toolcalling`** — the command/control quadrant, scored by `score_case`
-  (config `config/default.yaml`, splits via `build_splits.py`). This README's contract
-  section describes it.
-- **`envs/incar_chat`** — the grounded informational quadrant, scored by `score_chat_case`
-  (faithfulness gate; config `config/incar_chat.yaml`, splits via `build_chat_splits.py`).
-  Same contract shape: skill = system prompt, `context + question` = user message,
-  `hard = faithful`, `soft = relevancy`. Register `IncarChatAdapter` as `incar_chat` in
-  `scripts/train.py` and run `--config configs/incar_chat/default.yaml`. Grounded corpus
-  is smoke-scale until it grows (GitLab #16).
+- **`envs/incar_toolcalling`** — the command/control quadrant in isolation, scored by
+  `score_case` (config `config/default.yaml`, splits via `build_splits.py`). This
+  README's contract section describes it.
+- **`envs/incar_chat`** — the grounded informational quadrant in isolation, scored by
+  `score_chat_case` (faithfulness gate; config `config/incar_chat.yaml`, splits via
+  `build_chat_splits.py`). Skill = system prompt, `context + question` = user message,
+  `hard = faithful`, `soft = relevancy`.
+- **`envs/incar_unified`** — **the realistic deployment target: ONE skill for both.**
+  A mixed corpus; every case shows the available intents, so the model must *route* —
+  emit a JSON tool call for a command or prose for a question. A dispatch evaluator
+  grades routing + content: command→`score_case`, chat→`score_chat_case`, and a
+  **wrong-form** answer scores 0 (answered-when-should-act, or acted-when-should-answer).
+  Config `config/incar_unified.yaml`, splits via `build_unified_splits.py`.
+
+The two isolated envs are for debugging each quadrant; `incar_unified` optimizes the
+single skill the car actually ships. Register each adapter in `scripts/train.py` and run
+with the matching `--config configs/<env>/default.yaml`.
 
 ## Contract mapping (verified against SkillOpt `main`)
 

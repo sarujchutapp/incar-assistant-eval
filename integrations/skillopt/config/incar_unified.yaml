@@ -1,0 +1,39 @@
+# Copy to <skillopt>/configs/incar_unified/default.yaml
+_base_: ../_base_/default.yaml
+
+model:
+  reasoning_effort: ""   # target/optimizer models come from --target_model / --optimizer_model
+                         # (Ollama via the OpenAI-compatible endpoint in .env)
+
+train:
+  num_epochs: 4
+  train_size: 0
+  batch_size: 20
+  accumulation: 1
+  seed: 42
+
+gradient:
+  minibatch_size: 8
+  merge_batch_size: 8
+
+optimizer:
+  learning_rate: 4
+
+evaluation:
+  use_gate: true
+  gate_metric: mixed
+  gate_mixed_weight: 0.5
+  sel_env_num: 0
+  test_env_num: 0
+  eval_test: true
+
+env:
+  name: incar_unified
+  skill_init: skillopt/envs/incar_unified/skills/initial.md
+  split_mode: split_dir
+  split_dir: data/incar_unified_split
+  data_path: ""
+  split_output_dir: ""
+  max_completion_tokens: 1024
+  workers: 8
+  limit: 0
