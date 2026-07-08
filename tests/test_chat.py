@@ -34,6 +34,14 @@ def test_faithful_tolerates_number_word_and_unit_variants() -> None:
     assert not score_chat_case(case, "Traffic is adding 20 minutes.").faithful
 
 
+def test_faithful_folds_percent_symbol() -> None:
+    # "48%" and "48 percent" are spoken identically -> must score the same
+    case = ChatCase("what's the battery level?", fact="48 percent")
+    assert score_chat_case(case, "You're at 48%.").faithful
+    assert score_chat_case(case, "Battery is 48 percent.").faithful
+    assert not score_chat_case(case, "You're at 60%.").faithful
+
+
 def test_off_topic_answer_has_low_relevancy() -> None:
     case = ChatCase("what's my ETA?", fact="25 minutes")
     on_topic = score_chat_case(case, "Your ETA is 25 minutes.")

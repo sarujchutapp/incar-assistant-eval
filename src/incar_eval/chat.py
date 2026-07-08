@@ -74,8 +74,9 @@ _UNIT_SYNONYMS = {
 
 
 def _canon(text: str) -> list[str]:
-    """Canonical token stream: number words -> digits (safety._tokens), then unit
-    abbreviations/singulars folded to one form."""
+    """Canonical token stream: '%' -> percent (spoken the same), number words ->
+    digits (safety._tokens), then unit abbreviations/singulars folded to one form."""
+    text = text.replace("%", " percent ")
     return [_UNIT_SYNONYMS.get(t, t) for t in _tokens(text)]
 
 
