@@ -84,6 +84,16 @@ def test_load_chat_cases_builds_chat_cases(tmp_path: Path) -> None:
     assert cases[0].fact == "25 minutes"
 
 
+def test_load_chat_cases_reads_grounding_context(tmp_path: Path) -> None:
+    path = Path(_write(tmp_path / "chat_grounded.json", [
+        {"question": "what's my ETA?", "context": "ETA: 25 minutes.", "fact": "25 minutes"},
+        {"question": "how much fuel is left?", "fact": "low"},  # no context -> ""
+    ]))
+    cases = load_chat_cases(path)
+    assert cases[0].context == "ETA: 25 minutes."
+    assert cases[1].context == ""
+
+
 def test_load_chat_clients_builds_callable_models(tmp_path: Path) -> None:
     path = Path(_write(tmp_path / "chat_responses.json", {
         "strong": {"what's my ETA?": "Your ETA is about 25 minutes."},

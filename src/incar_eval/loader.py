@@ -89,7 +89,10 @@ def run_from_files(cases_path: str | Path, responses_path: str | Path, baseline:
 
 def load_chat_cases(path: str | Path) -> list[ChatCase]:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
-    return [ChatCase(question=item["question"], fact=item["fact"]) for item in data]
+    return [
+        ChatCase(question=item["question"], fact=item["fact"], context=item.get("context", ""))
+        for item in data
+    ]
 
 
 def load_chat_clients(path: str | Path) -> dict[str, FakeModelClient]:

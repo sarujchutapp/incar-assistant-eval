@@ -1,0 +1,62 @@
+[
+  {
+    "question": "How long until I get there?",
+    "context": "Current route: 37 minutes to destination.",
+    "fact": "37 minutes"
+  },
+  {
+    "question": "What's my range looking like?",
+    "context": "Fuel range: 142 miles remaining.",
+    "fact": "142 miles"
+  },
+  {
+    "question": "How cold is it out there?",
+    "context": "Exterior temperature: 46 degrees.",
+    "fact": "46 degrees"
+  },
+  {
+    "question": "How far to the next place I can pull over?",
+    "context": "Next rest area in 23 kilometers.",
+    "fact": "23 kilometers"
+  },
+  {
+    "question": "When am I getting in?",
+    "context": "Estimated arrival: 6 15 pm.",
+    "fact": "6 15 pm"
+  },
+  {
+    "question": "Where's my battery at?",
+    "context": "Battery charge: 48 percent.",
+    "fact": "48 percent"
+  },
+  {
+    "question": "What can I do on this stretch?",
+    "context": "Posted speed limit on this road: 55 mph.",
+    "fact": "55 mph"
+  },
+  {
+    "question": "How soon is the exit coming up?",
+    "context": "Next exit in 7 miles.",
+    "fact": "7 miles"
+  },
+  {
+    "question": "Is traffic slowing me down much?",
+    "context": "Traffic delay on current route: 9 minutes.",
+    "fact": "9 minutes"
+  },
+  {
+    "question": "How's my front left tire?",
+    "context": "Front left tire pressure: 32 psi.",
+    "fact": "32 psi"
+  },
+  {
+    "question": "How long have I been on the road?",
+    "context": "Time driven this trip: 2 hours 5 minutes.",
+    "fact": "2 hours 5 minutes"
+  },
+  {
+    "question": "Can I find somewhere to charge nearby?",
+    "context": "Nearest fast charger: 12 miles away.",
+    "fact": "12 miles"
+  }
+]

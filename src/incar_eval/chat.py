@@ -10,6 +10,7 @@ import re
 from dataclasses import dataclass
 
 from .client import ModelClient
+from .safety import _tokens  # shared number-word / value canonicalization
 
 _STOPWORDS = frozenset(
     {"the", "a", "an", "is", "are", "my", "what", "whats", "s", "to", "of", "in",
@@ -26,6 +27,10 @@ SYSTEM_PROMPT = (
 class ChatCase:
     question: str
     fact: str  # the ground-truth fact the answer must contain
+    #: A short car-telemetry / KB snippet fed to the model. When set, the answer
+    #: is derivable only from here (contamination-proof grounding). Empty = the
+    #: original closed-book case.
+    context: str = ""
 
 
 @dataclass(frozen=True)
@@ -55,8 +60,31 @@ def _content_words(text: str) -> set[str]:
     return {w for w in _normalize(text).split() if w and w not in _STOPWORDS}
 
 
+#: Unit abbreviations/singulars -> a canonical form, so "12 min" / "12 minute"
+#: match fact "12 minutes". Number words are already handled by safety._tokens.
+_UNIT_SYNONYMS = {
+    "min": "minutes", "mins": "minutes", "minute": "minutes",
+    "hr": "hours", "hrs": "hours", "hour": "hours",
+    "sec": "seconds", "secs": "seconds", "second": "seconds",
+    "mi": "miles", "mile": "miles",
+    "km": "kilometers", "kilometre": "kilometers", "kilometres": "kilometers", "kilometer": "kilometers",
+    "pct": "percent", "percentage": "percent",
+    "deg": "degrees", "degree": "degrees",
+}
+
+
+def _canon(text: str) -> list[str]:
+    """Canonical token stream: number words -> digits (safety._tokens), then unit
+    abbreviations/singulars folded to one form."""
+    return [_UNIT_SYNONYMS.get(t, t) for t in _tokens(text)]
+
+
 def _faithful(fact: str, answer: str) -> bool:
-    return _normalize(fact).strip() in _normalize(answer)
+    """The fact's canonical tokens appear as a contiguous run in the answer."""
+    needle, hay = _canon(fact), _canon(answer)
+    if not needle:
+        return True
+    return any(hay[i:i + len(needle)] == needle for i in range(len(hay) - len(needle) + 1))
 
 
 def _relevancy(question: str, answer: str) -> float:
@@ -76,7 +104,8 @@ def score_chat_case(case: ChatCase, answer: str) -> ChatOutcome:
 
 
 def build_chat_prompt(case: ChatCase) -> str:
-    return f"{SYSTEM_PROMPT}\n\nDriver asks: \"{case.question}\""
+    context = f"Context:\n{case.context}\n\n" if case.context else ""
+    return f"{SYSTEM_PROMPT}\n\n{context}Driver asks: \"{case.question}\""
 
 
 def run_chat_benchmark(
