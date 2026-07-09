@@ -16,6 +16,7 @@ model:
   target_azure_openai_api_key: "ollama"
   target_azure_openai_auth_mode: "openai_compatible"
   reasoning_effort: ""
+  rewrite_max_completion_tokens: 4096   # cap optimizer rewrite output (base default is 64000 = ~$1/call on Sonnet)
 
 train:
   num_epochs: 1        # keep the first capped run TINY

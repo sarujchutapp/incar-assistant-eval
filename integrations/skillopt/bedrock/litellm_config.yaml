@@ -10,10 +10,13 @@
 model_list:
   - model_name: bedrock-sonnet          # alias SkillOpt uses as --optimizer_model
     litellm_params:
-      # VERIFY the exact id for your account/region:
-      #   aws bedrock list-foundation-models --query "modelSummaries[?contains(modelId,'claude')].modelId"
-      model: bedrock/anthropic.claude-sonnet-4-6-v1:0   # <-- placeholder; set your region's Sonnet id
-      aws_region_name: us-east-1                        # <-- your Bedrock region
+      # Newer Claude models REJECT the bare model id ("Invocation ... with on-demand
+      # throughput isn't supported") — you MUST use a cross-region INFERENCE PROFILE id.
+      # List them and pick your region's Sonnet profile:
+      #   aws bedrock list-inference-profiles --region <region> \
+      #     --query "inferenceProfileSummaries[?contains(inferenceProfileId,'sonnet')].inferenceProfileId"
+      model: bedrock/global.anthropic.claude-sonnet-5   # inference-profile id (global.* here); verified via list-inference-profiles
+      aws_region_name: ap-southeast-1                   # <-- your Bedrock region
       max_tokens: 2048                                  # per-call OUTPUT cap (bounds worst-case per call)
       rpm: 20                                           # requests/min ceiling
       tpm: 40000                                        # tokens/min ceiling
