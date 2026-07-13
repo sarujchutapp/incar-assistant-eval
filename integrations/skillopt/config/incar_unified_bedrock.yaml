@@ -36,6 +36,8 @@ evaluation:
   use_gate: true
   gate_metric: mixed
   gate_mixed_weight: 0.5
+  gate_aggregation: min   # gate on the WORST case_type, not the pooled avg — so a
+                          # candidate can't trade chat away to boost command
   sel_env_num: 0
   test_env_num: 0
   eval_test: true

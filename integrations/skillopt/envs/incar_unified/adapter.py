@@ -8,6 +8,7 @@ evaluator dispatches per case type.
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from skillopt.datasets.base import BatchSpec
@@ -78,6 +79,45 @@ class IncarUnifiedAdapter(EnvAdapter):
             workers=self.workers,
             max_completion_tokens=self.max_completion_tokens,
         )
+
+    def reflect(self, results: list[dict], skill_content: str, out_dir: str, **kwargs: Any) -> list[dict | None]:
+        """Stratified reflect: run the minibatch stage once per case_type.
+
+        The stock reflect pools all failures, shuffles, and splits into
+        size-M minibatches — so the few chat failures get scattered among the
+        many command failures and an analyst minibatch is often all-command,
+        which is why the optimizer only ever wrote command rules. Grouping by
+        case_type first guarantees each quadrant reflects on its own
+        trajectories and produces type-specific edits.
+        """
+        from skillopt.gradient.reflect import run_minibatch_reflect
+
+        by_type: dict[str, list[dict]] = {}
+        for r in results:
+            by_type.setdefault(str(r.get("task_type", "command")), []).append(r)
+
+        prediction_dir = kwargs.get("prediction_dir", os.path.join(out_dir, "predictions"))
+        patches_root = kwargs.get("patches_dir", os.path.join(out_dir, "patches"))
+
+        patches: list[dict | None] = []
+        for tt, group in by_type.items():
+            patches += run_minibatch_reflect(
+                results=group,
+                skill_content=skill_content,
+                prediction_dir=prediction_dir,
+                patches_dir=os.path.join(patches_root, tt),  # per-type dir avoids filename collisions
+                workers=self.analyst_workers,
+                failure_only=self.failure_only,
+                minibatch_size=self.minibatch_size,
+                edit_budget=self.edit_budget,
+                random_seed=kwargs.get("random_seed"),
+                error_system=self.get_error_minibatch_prompt(),
+                success_system=self.get_success_minibatch_prompt(),
+                step_buffer_context=kwargs.get("step_buffer_context", ""),
+                meta_skill_context=kwargs.get("meta_skill_context", ""),
+                update_mode=getattr(self, "_cfg", {}).get("skill_update_mode", "patch"),
+            )
+        return patches
 
     def get_task_types(self) -> list[str]:
         seen: list[str] = []
