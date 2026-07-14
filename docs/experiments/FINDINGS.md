@@ -153,6 +153,15 @@ model ignores — so neither hand-writing nor optimizing the prompt moves the
 needle. The limit is model capability/compliance, not rule generation. *(Shown at
 1 epoch on a weak target; a capable target is the clean test.)*
 
+**Corollary (v3): the weak target also over-applies rules it *does* follow.**
+Adding one abstain rule to the seed ("if Context lacks the fact, say you don't
+have it") made llama3 refuse **6 answerable** questions whose fact was in context
+— baseline chat 0.95 → 0.625, entirely over-abstention, not hallucination. A rule
+precise enough to fix one failure mode blunt-forces the opposite one on a model
+that can't calibrate when it applies. Rules for weak targets need *both* sides
+stated ("if the fact IS present, always answer it") — and even then compliance is
+the ceiling.
+
 **Shots.** Everything here is **zero-shot** — the skill carries instructions + one
 format example, no per-case demonstrations. SkillOpt edits the skill *text*, so it
 *can* add worked examples (**static few-shot in the system prompt**); it just

@@ -44,10 +44,22 @@ the very first run's chat collapse.
 2. **The min-gate can't stop a val→test drop.** It gates on the worst *val*
    quadrant; command held on val but cratered on test. Same overfit signal as v2,
    louder. best-on-val = −0.0227 vs seed; final = same.
-3. **Baseline chat 0.625 (vs v2's 0.95) is the benchmark working, not a regression.**
-   The 15 abstain cases now count and the baseline model hallucinates on some
-   unanswerable questions — exactly the failure the new cases were built to catch.
-4. **Abstain cases too few in test (3) to measure.** baseline 2/3 → best 1/3,
+3. **Baseline chat fell 0.95→0.625 because the abstain rule backfired, NOT
+   because the benchmark caught hallucination.** Per-case: baseline chat = 13/21
+   answerable + 2/3 unanswerable. Command baseline is *identical* to v2 (11/20),
+   so the whole overall drop is this chat quadrant. Of the 8 answerable failures,
+   **6 are over-abstention** — llama3 over-generalized the new seed rule ("if
+   Context lacks the fact, say you don't have it") and refused questions whose
+   fact was sitting in context ("I don't have that information" for pharmacy=9 PM,
+   toll=$12.30, battery=40 min, …). The other 2 are scorer paraphrase
+   false-negatives ("level 2"→"2", "currently on"→"on", §7). The 3 abstain cases
+   themselves passed 2/3 and are irrelevant to the drop. This is the same
+   compliance ceiling (§9): a weak target applies an instruction too bluntly —
+   here trading hallucination for over-refusal.
+4. **The optimizer delta is actually SMALLER than v2, not larger.** best-on-val
+   −0.0227 here vs −0.0488 in v2. The run looks "worse" only because the *baseline*
+   dropped (finding 3); the optimizer did slightly less damage.
+5. **Abstain cases too few in test (3) to measure.** baseline 2/3 → best 1/3,
    flipped both directions = noise. Mechanically correct; needs more cases to read.
 
 ## Honest conclusion
@@ -62,4 +74,6 @@ optimizer still added nothing. The one lever that could flip the verdict remains
 ## Not comparable to v1/v2
 
 Corpus v3 (test 44, chat 24 incl. 15 abstain corpus-wide) — chat baselines reset
-downward because abstain cases now count. Command track (20) is unchanged from v2.
+downward, but mostly from the seed abstain rule inducing over-abstention on
+*answerable* questions (finding 3), not from the abstain cases. Command track (20)
+is unchanged from v2 (baseline 11/20 both).
