@@ -119,6 +119,38 @@ Our setup violated (1), (3), and (4) at once — good seed, ~40-item val, weak
 target — so the honest result is **no gain**, and prompt engineering won. This is
 not "SkillOpt doesn't work"; it's "these are the conditions under which it does."
 
+## 9. On a weak target, the ceiling is *compliance*, not rule generation
+
+Worked example — the command `"call him back"` (ambiguous: no referent). Gold =
+`call_contact, slots={}, clarify`. llama3 emitted:
+
+```json
+{"intent": "call_contact", "slots": {"name": "him"}, "mode": "execute"}
+```
+
+It copied the pronoun as a slot value and executed → `hard=0` (soft=0.5, intent
+was right). **This failed identically under the seed *and* the best_skill.**
+
+The tempting reading is "SkillOpt can't generate the obvious rule." The evidence
+says the opposite: the rule was present the whole time (seed: *"names a target
+only by pronoun ('her') → omit that slot"*), **and the optimizer *added* a
+reinforcing correctness rule** during the run (*"never emit null/unknown/empty —
+leave the key out"*). So the optimizer *did* produce the right guidance; the weak
+target simply **did not comply**.
+
+**Lesson: text-space optimization can only help to the extent the target follows
+instructions.** On a weak model the optimizer can propose correct rules that the
+model ignores — so neither hand-writing nor optimizing the prompt moves the
+needle. The limit is model capability/compliance, not rule generation. *(Shown at
+1 epoch on a weak target; a capable target is the clean test.)*
+
+**Shots.** Everything here is **zero-shot** — the skill carries instructions + one
+format example, no per-case demonstrations. SkillOpt edits the skill *text*, so it
+*can* add worked examples (**static few-shot in the system prompt**); it just
+mostly wrote rules. Dynamic per-query retrieval few-shot is outside its scope. If
+a model ignores a rule, a seeded example is the cheap test of whether it needs
+demonstrations rather than instructions.
+
 ## Cost
 
 Whole investigation ≈ **$6.50** of Bedrock spend (three runs). The target (Ollama)
@@ -134,5 +166,12 @@ budget matters.
 - **Read-tool category.** The benchmark models informational queries as grounded
   prose; a real assistant would invoke getters. A third `case_type` is possible
   but only worth it if getter-invocation is a deployment requirement.
+- **Fill-from-context (command coverage gap).** Command cases carry no resolving
+  `context` — only `car_state` + an `ambiguity` label. So we test fill-from-
+  utterance (`clear`), fill-from-default (`defaultable`), and omit+clarify
+  (`ambiguous`), but **not** "utterance under-specified BUT context resolves it →
+  fill from context" (e.g. `context: "him" = last caller` → fill the name). The
+  `ambiguity` field is a difficulty *label*, not a resolving context; this fourth
+  scenario needs a context field commands lack (overlaps the read-tool idea).
 - **Scorer strictness.** Decide deliberately whether the chat faithfulness check
   should accept paraphrases (recall vs reproducibility trade-off).
