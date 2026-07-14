@@ -38,19 +38,22 @@ def _expected(item: dict[str, Any]) -> str:
     """Human/analyst-readable expectation, mirroring what ``is_success`` checks.
 
     Command success is NOT just intent+slots: abstention cases must decline to
-    act, ambiguous cases are scored ONLY on ``mode=clarify`` (intent/slots
-    ignored), and clear/defaultable cases also require the stakes-derived mode.
-    Showing only intent+slots (the old behavior) misrepresented ambiguous and
-    abstention cases in the logs.
+    act, ambiguous cases require ``mode=clarify`` with the correct intent (the
+    missing slot is unscored — it's what the clarify is for), and clear/
+    defaultable cases also require the stakes-derived mode. Showing only
+    intent+slots (the old behavior) misrepresented ambiguous and abstention
+    cases in the logs.
     """
     if item["case_type"] != "command":
+        if not item.get("answerable", True):
+            return "abstain — context does not support an answer; must NOT answer"
         return f'answer must contain: {item["fact"]}'
     intent = item["expected_intent"]
     if intent in ABSTENTION_LABELS:
         return f'abstain — must NOT act (intent={intent})'
     ambiguity = item.get("ambiguity", "clear")
     if ambiguity == "ambiguous":
-        return f'mode=clarify — must clarify, not act (intent/slots not scored; ~{intent})'
+        return f'mode=clarify with intent={intent} — must clarify, not act (slot unscored)'
     mode = expected_mode(SCHEMA[intent].stakes, ambiguity).value
     return f'intent={intent} slots={item.get("expected_slots", {})} mode={mode}'
 

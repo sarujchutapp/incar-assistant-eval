@@ -34,7 +34,9 @@ def _write(items: list[dict], out_dir: str) -> None:
 
 def _stratum(item: dict) -> str:
     if item["case_type"] == "chat":
-        return "chat"
+        # keep unanswerable (abstention) chat its own stratum so every split holds
+        # some — otherwise the minority hallucination cases could miss a split
+        return "chat" if item.get("answerable", True) else "chat/unanswerable"
     intent = item["expected_intent"]
     return f"cmd/{intent if intent in ABSTENTION else item.get('ambiguity', 'clear')}"
 

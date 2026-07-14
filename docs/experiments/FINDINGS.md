@@ -205,11 +205,15 @@ budget matters.
   scenario needs a context field commands lack (overlaps the read-tool idea).
 - **Scorer strictness.** Decide deliberately whether the chat faithfulness check
   should accept paraphrases (recall vs reproducibility trade-off).
-- **Ambiguous scoring ignores intent (design decision).** For `ambiguous`
-  commands, success = `mode=clarify` regardless of intent — so a model passes by
-  clarifying with a *garbage* intent (the climate `intent="clarify"` case).
-  Decide whether ambiguous cases should *also* require the correct intent.
-- **Chat clarify/abstain path.** Every chat case is answerable from context, so
-  the model is never tested on "I don't have that" — meaning a hallucinated
-  answer to an unanswerable question would pass undetected. Highest-value chat
-  gap (needs abstention cases + an abstention check, not just faithfulness).
+- **Ambiguous scoring ignores intent** — *resolved 2026-07-14.* `is_success` now
+  requires `mode=clarify` **and** the correct intent for ambiguous commands (the
+  intent is always knowable across our corpus; only a slot is missing, which
+  stays unscored). A clarify with the wrong intent no longer passes. The cost
+  model is deliberately left as-is — a harmless clarify still scores CORRECT on
+  the *safety* axis even when it's not a task success.
+- **Chat clarify/abstain path** — *resolved 2026-07-14.* `ChatCase` gained an
+  `answerable` flag; when False the context deliberately doesn't support an
+  answer and success = the model abstains (deterministic marker-phrase check,
+  same spirit as `_faithful`). Added 10 unanswerable cases (distractor context)
+  to `chat_grounded.json`, stratified as their own split group so every split
+  holds some. Answering anyway now registers as a hallucination failure.

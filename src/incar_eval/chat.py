@@ -26,11 +26,15 @@ SYSTEM_PROMPT = (
 @dataclass(frozen=True)
 class ChatCase:
     question: str
-    fact: str  # the ground-truth fact the answer must contain
+    fact: str = ""  # the ground-truth fact the answer must contain (empty for unanswerable)
     #: A short car-telemetry / KB snippet fed to the model. When set, the answer
     #: is derivable only from here (contamination-proof grounding). Empty = the
     #: original closed-book case.
     context: str = ""
+    #: When False the context does NOT support an answer — the honest response is
+    #: to abstain ("I don't have that"). Success then = the model abstained, not
+    #: faithfulness; this is the hallucination check (answering anyway = failure).
+    answerable: bool = True
 
 
 @dataclass(frozen=True)
@@ -95,11 +99,29 @@ def _relevancy(question: str, answer: str) -> float:
     return len(q_words & _content_words(answer)) / len(q_words)
 
 
+#: Phrases that signal the assistant declined to answer ("I don't have that").
+#: Deterministic, like _faithful — the honest response to an unanswerable
+#: question is to say it can't, so an abstention marker is the pass condition.
+_ABSTAIN_MARKERS = (
+    "don't have", "dont have", "do not have", "don't know", "dont know",
+    "do not know", "not sure", "can't tell", "cant tell", "cannot tell",
+    "can't answer", "cannot answer", "no information", "not available",
+    "don't see", "dont see", "no data", "unable to", "i don't have",
+)
+
+
+def _abstains(answer: str) -> bool:
+    """The answer declines to answer — the correct response when unanswerable."""
+    a = answer.lower()
+    return any(m in a for m in _ABSTAIN_MARKERS)
+
+
 def score_chat_case(case: ChatCase, answer: str) -> ChatOutcome:
+    faithful = _abstains(answer) if not case.answerable else _faithful(case.fact, answer)
     return ChatOutcome(
         case=case,
         answer=answer,
-        faithful=_faithful(case.fact, answer),
+        faithful=faithful,
         relevancy=_relevancy(case.question, answer),
     )
 

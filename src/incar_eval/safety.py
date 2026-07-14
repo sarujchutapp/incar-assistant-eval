@@ -206,7 +206,12 @@ def is_success(gold: GoldRecord, emitted: ToolCall, routing: RoutingOutcome) -> 
     if intent in ABSTENTION_LABELS:
         return routing is RoutingOutcome.CORRECT_ABSTENTION
     if gold.ambiguity == "ambiguous":
-        return emitted.mode is ResponseMode.CLARIFY
+        # Must clarify AND have routed the right task: the intent is always
+        # knowable for our ambiguous cases (only a slot is missing — "call *him*
+        # back" is unambiguously call_contact), so a clarify with the wrong
+        # intent is not success. Slots stay unscored (the missing slot is what
+        # the clarify is *for*).
+        return emitted.mode is ResponseMode.CLARIFY and emitted.intent == intent
     return (
         routing is RoutingOutcome.CORRECT_ACTION
         and emitted.intent == intent

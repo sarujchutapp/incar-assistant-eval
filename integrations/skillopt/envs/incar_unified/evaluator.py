@@ -47,7 +47,13 @@ def evaluate(item: dict[str, Any], raw: str) -> dict[str, Any]:
     # chat
     if tool is not None:  # acted instead of answering
         return {"id": item["id"], "hard": 0.0, "soft": 0.0, "response": raw, "fail_reason": "acted_not_answered"}
-    outcome = score_chat_case(ChatCase(item["question"], item["fact"], item.get("context", "")), raw)
+    case = ChatCase(
+        item["question"],
+        item.get("fact", ""),
+        item.get("context", ""),
+        answerable=item.get("answerable", True),
+    )
+    outcome = score_chat_case(case, raw)
     return {
         "id": item["id"],
         "hard": 1.0 if outcome.faithful else 0.0,

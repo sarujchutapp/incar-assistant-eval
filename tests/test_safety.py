@@ -226,3 +226,10 @@ def test_ambiguous_success_requires_clarify() -> None:
     gold = GoldRecord("call someone", "call_contact", {"name": "?"}, ambiguity="ambiguous")
     assert score_case(gold, ToolCall("call_contact", {}, ResponseMode.CLARIFY)).success
     assert not score_case(gold, ToolCall("call_contact", {"name": "x"})).success
+
+
+def test_ambiguous_success_requires_correct_intent() -> None:
+    # clarifying with the WRONG intent is not success — the task was mis-routed
+    gold = GoldRecord("call someone", "call_contact", {"name": "?"}, ambiguity="ambiguous")
+    assert not score_case(gold, ToolCall("navigate", {}, ResponseMode.CLARIFY)).success
+    assert score_case(gold, ToolCall("call_contact", {}, ResponseMode.CLARIFY)).success

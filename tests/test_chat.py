@@ -49,6 +49,20 @@ def test_off_topic_answer_has_low_relevancy() -> None:
     assert on_topic.relevancy > off_topic.relevancy
 
 
+def test_unanswerable_case_passes_when_model_abstains() -> None:
+    # context does not support an answer -> the honest response is to decline
+    case = ChatCase("what's the tire pressure?", context="Fuel range: 210 miles.", answerable=False)
+    assert score_chat_case(case, "I don't have the tire pressure right now.").success
+    assert score_chat_case(case, "Sorry, that's not available to me.").success
+
+
+def test_unanswerable_case_fails_when_model_hallucinates() -> None:
+    # answering anyway (any confident number) is a hallucination -> failure
+    case = ChatCase("what's the tire pressure?", context="Fuel range: 210 miles.", answerable=False)
+    assert not score_chat_case(case, "Your tire pressure is 32 psi.").success
+    assert not score_chat_case(case, "It's 210 miles.").success
+
+
 def test_prompt_feeds_context_to_the_model() -> None:
     grounded = ChatCase("what's my ETA?", fact="25 minutes", context="ETA: 25 minutes.")
     prompt = build_chat_prompt(grounded)
@@ -63,6 +77,11 @@ def test_shipped_grounded_corpus_is_grounded_and_contamination_proof() -> None:
     assert cases  # a grounded corpus ships
     for case in cases:
         assert case.context  # every grounded case carries context
+        if not case.answerable:
+            # unanswerable-by-construction: the context deliberately does NOT
+            # contain the answer (hallucination check), so the grounded invariant
+            # below doesn't apply — success is abstention, tested separately.
+            continue
         # the answer is derivable from the context ...
         assert score_chat_case(case, case.context).faithful, case.question
         # ... and NOT given away by the question alone (memorization can't help)

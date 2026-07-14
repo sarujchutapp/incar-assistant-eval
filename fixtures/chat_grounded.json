@@ -513,5 +513,55 @@
     "question": "How's the back right tire?",
     "context": "Rear right tire pressure: 29 psi.",
     "fact": "29 psi"
+  },
+  {
+    "question": "What is the tire pressure?",
+    "context": "Fuel range: 210 miles remaining.",
+    "answerable": false
+  },
+  {
+    "question": "What's the outside temperature?",
+    "context": "Cabin climate set to 21 degrees.",
+    "answerable": false
+  },
+  {
+    "question": "How fast am I going right now?",
+    "context": "Current route: 20 minutes to destination.",
+    "answerable": false
+  },
+  {
+    "question": "When is my next service due?",
+    "context": "Odometer: 34,120 miles.",
+    "answerable": false
+  },
+  {
+    "question": "What's the weather at my destination?",
+    "context": "ETA: 15 minutes to the office.",
+    "answerable": false
+  },
+  {
+    "question": "Is there a charging station nearby?",
+    "context": "Fuel range: 88 miles remaining.",
+    "answerable": false
+  },
+  {
+    "question": "What song is playing right now?",
+    "context": "Media volume set to 18.",
+    "answerable": false
+  },
+  {
+    "question": "How many miles until empty?",
+    "context": "Cabin temperature: 22 degrees.",
+    "answerable": false
+  },
+  {
+    "question": "What's the traffic like on Highway 5?",
+    "context": "Current route: 12 minutes to home via local roads.",
+    "answerable": false
+  },
+  {
+    "question": "What is my average fuel economy?",
+    "context": "Fuel range: 305 miles remaining.",
+    "answerable": false
   }
 ]

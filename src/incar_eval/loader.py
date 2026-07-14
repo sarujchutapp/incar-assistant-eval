@@ -90,7 +90,12 @@ def run_from_files(cases_path: str | Path, responses_path: str | Path, baseline:
 def load_chat_cases(path: str | Path) -> list[ChatCase]:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
     return [
-        ChatCase(question=item["question"], fact=item["fact"], context=item.get("context", ""))
+        ChatCase(
+            question=item["question"],
+            fact=item.get("fact", ""),
+            context=item.get("context", ""),
+            answerable=item.get("answerable", True),
+        )
         for item in data
     ]
 
