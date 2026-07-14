@@ -1,5 +1,7 @@
 # SkillOpt experiments
 
+**→ [FINDINGS.md](FINDINGS.md) — the cross-cutting lessons (read this first).**
+
 Tracking log for SkillOpt runs on the `incar_unified` env. One folder per run,
 each containing:
 
