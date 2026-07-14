@@ -11,8 +11,9 @@ each containing:
 
 Test scores are on `valid_unseen`; the headline number is **best-on-val**, the
 skill you would actually deploy. Test size differs by corpus version — **v1** =
-29 items (9 chat, 20 command); **v2** = 41 items (21 chat, 20 command) — so
-`overall` is **not comparable across corpus versions**.
+29 items (9 chat, 20 command); **v2** = 41 items (21 chat, 20 command); **v3** =
+44 items (24 chat incl. 15 abstain corpus-wide, 20 command) — so `overall` is
+**not comparable across corpus versions**.
 
 ## Runs
 
@@ -21,8 +22,9 @@ skill you would actually deploy. Test size differs by corpus version — **v1** 
 | 2026-07-09 | [micro-gate baseline](2026-07-09_micro-gate-collapse/results.md) | v1 | 0.00 ☠️ | 0.50 | 0.345 | chat collapsed |
 | 2026-07-13 | [min-gate + stratified + rebalanced seed](2026-07-13_min-gate-stratified/results.md) | v1 | 0.556 | 0.30 | 0.379 | collapse fixed, both quadrants alive |
 | 2026-07-13 pm | [seed format fix + corpus v2 + temp-0](2026-07-13_seed-fix-corpus-v2/results.md) | v2 | 0.810 | 0.600 | 0.707 | **seed fix baseline=0.756; optimizer no gain (overfit −0.05)** |
+| 2026-07-14 | [abstain cases + corpus v3](2026-07-14_abstain-corpus-v3/results.md) | v3 | 0.792 | 0.300 ☠️ | 0.568 | **seed=0.591; command collapsed via format regression (overfit −0.02)** |
 
-(chat / command / overall = best-on-val hard accuracy. For the v2 run the **baseline seed (0.756) beat best-on-val (0.707)** — the seed format fix was the real win; SkillOpt added nothing on top.)
+(chat / command / overall = best-on-val hard accuracy. For v2 and v3 the **baseline seed beat best-on-val** — seed 0.756 / 0.591 vs best 0.707 / 0.568. The seed is the deployable artifact; SkillOpt overfits val and hurts test on this weak-target setup — v1 it sacrificed chat, v3 command.)
 
 ## How to add the next run
 

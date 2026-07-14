@@ -66,6 +66,15 @@ scalar reward is **blind to trading one behavior mode for another**. Two fixes:
 This is a benchmark-design lesson as much as an optimizer one: **the "overall"
 number is the one most likely to lie to you.**
 
+*Caveat (v3): the min-gate protects the worst **val** quadrant, not test.* In the
+v3 run the accepted skill held command on val but collapsed it on test (0.55 →
+0.30) — the optimizer, pulled toward the newly-added chat/abstain cases, rewrote
+the skill so the model prefixed commands with `**Question**` and answered in prose,
+re-introducing the `answered_not_acted` format bug the seed had cured. The gate
+can't see a val→test drop; only a larger val set narrows it. Note the collapse
+direction is not fixed: v1 sacrificed chat, v3 sacrificed command — whichever
+quadrant the current emphasis pulls away from.
+
 ## 4. Generalization: val, test, best, and final are four different things
 
 - **best-on-val ≠ best-on-test.** The optimizer maximizes a *validation* score;
