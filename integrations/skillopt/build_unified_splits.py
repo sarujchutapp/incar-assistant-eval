@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import random
 from collections import Counter, defaultdict
 
 ABSTENTION = {"none", "out_of_scope"}
@@ -42,6 +43,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--fixtures", required=True)
     ap.add_argument("--out", default="data/incar_unified_split")
+    ap.add_argument("--seed", type=int, default=42, help="shuffle seed so splits are representative (not authoring-order)")
     args = ap.parse_args()
 
     pool: list[dict] = []
@@ -56,11 +58,13 @@ def main() -> None:
     for item in pool:
         groups[_stratum(item)].append(item)
 
+    rng = random.Random(args.seed)
     train: list[dict] = []
     val: list[dict] = []
     test: list[dict] = []
     for key in sorted(groups):
         g = groups[key]
+        rng.shuffle(g)  # representative split, not authoring-order; seeded for reproducibility
         n_val = round(len(g) * 0.2)
         n_test = round(len(g) * 0.2)
         val += g[:n_val]

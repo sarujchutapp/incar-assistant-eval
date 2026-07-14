@@ -218,5 +218,300 @@
     "question": "How long has this drive been?",
     "context": "Trip: elapsed 42 minutes, 31 miles covered.",
     "fact": "42 minutes"
+  },
+  {
+    "question": "How much is the toll coming up?",
+    "context": "Upcoming toll: $4.75 on Route 9.",
+    "fact": "$4.75"
+  },
+  {
+    "question": "How many parking spots are open at the garage?",
+    "context": "Nearest parking garage: Elm Street Garage, 18 spots open, $6 per hour.",
+    "fact": "18 spots"
+  },
+  {
+    "question": "What's the parking garage called?",
+    "context": "Nearest parking garage: Elm Street Garage, 18 spots open, $6 per hour.",
+    "fact": "Elm Street Garage"
+  },
+  {
+    "question": "How's my engine oil holding up?",
+    "context": "Engine oil life: 35 percent remaining.",
+    "fact": "35 percent"
+  },
+  {
+    "question": "What's the coolant reading?",
+    "context": "Coolant temperature: 92 degrees Celsius.",
+    "fact": "92 degrees Celsius"
+  },
+  {
+    "question": "How long until the battery is full?",
+    "context": "Charging: 40 minutes to full at current rate.",
+    "fact": "40 minutes"
+  },
+  {
+    "question": "How's my washer fluid doing?",
+    "context": "Washer fluid level: 20 percent.",
+    "fact": "20 percent"
+  },
+  {
+    "question": "How humid is it in the cabin?",
+    "context": "Cabin humidity: 55 percent.",
+    "fact": "55 percent"
+  },
+  {
+    "question": "What's my seat warmer set to?",
+    "context": "Driver seat heater: level 2.",
+    "fact": "level 2"
+  },
+  {
+    "question": "Which way am I pointed?",
+    "context": "Current heading: northeast.",
+    "fact": "northeast"
+  },
+  {
+    "question": "What's the intersection coming up?",
+    "context": "Approaching intersection: Maple Street and 5th Avenue.",
+    "fact": "Maple Street and 5th Avenue"
+  },
+  {
+    "question": "Are there any cameras coming up?",
+    "context": "Speed camera reported in 2.3 miles.",
+    "fact": "2.3 miles"
+  },
+  {
+    "question": "What brand is the closest gas station?",
+    "context": "Nearest gas station: Shell, 3.6 miles, regular $3.89.",
+    "fact": "Shell"
+  },
+  {
+    "question": "How much is gas there?",
+    "context": "Nearest gas station: Shell, 3.6 miles, regular $3.89.",
+    "fact": "$3.89"
+  },
+  {
+    "question": "How far am I from home?",
+    "context": "Distance to home: 27 miles.",
+    "fact": "27 miles"
+  },
+  {
+    "question": "What's my average pace been?",
+    "context": "Average speed this trip: 44 mph.",
+    "fact": "44 mph"
+  },
+  {
+    "question": "How efficient has my driving been?",
+    "context": "Current fuel economy: 31 mpg.",
+    "fact": "31 mpg"
+  },
+  {
+    "question": "What's this trip costing me?",
+    "context": "Estimated trip energy cost: $5.20.",
+    "fact": "$5.20"
+  },
+  {
+    "question": "Did I miss any calls?",
+    "context": "Phone: 3 missed calls, 1 voicemail.",
+    "fact": "3 missed calls"
+  },
+  {
+    "question": "Are there any voicemails waiting?",
+    "context": "Phone: 3 missed calls, 1 voicemail.",
+    "fact": "1 voicemail"
+  },
+  {
+    "question": "How's my phone's battery?",
+    "context": "Paired phone battery: 22 percent.",
+    "fact": "22 percent"
+  },
+  {
+    "question": "What station am I tuned to?",
+    "context": "Radio: tuned to 88.5 FM, 'Jazz Nights'.",
+    "fact": "88.5 FM"
+  },
+  {
+    "question": "What show is this on the radio?",
+    "context": "Radio: tuned to 88.5 FM, 'Jazz Nights'.",
+    "fact": "Jazz Nights"
+  },
+  {
+    "question": "How loud is the volume set?",
+    "context": "Media volume: level 14.",
+    "fact": "level 14"
+  },
+  {
+    "question": "Which podcast is playing?",
+    "context": "Now playing podcast: 'Deep Dive' episode 47.",
+    "fact": "Deep Dive"
+  },
+  {
+    "question": "What episode am I on?",
+    "context": "Now playing podcast: 'Deep Dive' episode 47.",
+    "fact": "episode 47"
+  },
+  {
+    "question": "What's my cruise set at?",
+    "context": "Cruise control set to 63 mph.",
+    "fact": "63 mph"
+  },
+  {
+    "question": "How close am I to the car ahead?",
+    "context": "Following distance: 2.5 seconds.",
+    "fact": "2.5 seconds"
+  },
+  {
+    "question": "How close is the obstacle behind me?",
+    "context": "Rear obstacle detected 0.6 meters away.",
+    "fact": "0.6 meters"
+  },
+  {
+    "question": "What's the sunroof doing?",
+    "context": "Sunroof: open halfway.",
+    "fact": "open halfway"
+  },
+  {
+    "question": "What's the headlight status?",
+    "context": "Headlights: automatic, currently on.",
+    "fact": "currently on"
+  },
+  {
+    "question": "Is one of the doors open?",
+    "context": "Warning: front passenger door ajar.",
+    "fact": "front passenger door ajar"
+  },
+  {
+    "question": "What's my regen braking set to?",
+    "context": "Regenerative braking: strong.",
+    "fact": "strong"
+  },
+  {
+    "question": "When will I get home?",
+    "context": "Home arrival estimated at 7:48 PM.",
+    "fact": "7:48 PM"
+  },
+  {
+    "question": "How high up am I right now?",
+    "context": "Current elevation: 1240 feet.",
+    "fact": "1240 feet"
+  },
+  {
+    "question": "When's the sun going down?",
+    "context": "Sunset today: 8:03 PM.",
+    "fact": "8:03 PM"
+  },
+  {
+    "question": "How's the air quality where I'm headed?",
+    "context": "Air quality index at destination: 72.",
+    "fact": "72"
+  },
+  {
+    "question": "How far can I see ahead?",
+    "context": "Visibility ahead: 200 meters, fog.",
+    "fact": "200 meters"
+  },
+  {
+    "question": "What's cutting my visibility?",
+    "context": "Visibility ahead: 200 meters, fog.",
+    "fact": "fog"
+  },
+  {
+    "question": "What's on the road surface?",
+    "context": "Road condition: 2 inches of snow.",
+    "fact": "2 inches of snow"
+  },
+  {
+    "question": "How windy is it where I'm going?",
+    "context": "Destination wind: 22 km/h gusts.",
+    "fact": "22 km/h"
+  },
+  {
+    "question": "How's the pollen today?",
+    "context": "Pollen count: high.",
+    "fact": "high"
+  },
+  {
+    "question": "Which lane should I be in for the exit?",
+    "context": "Stay in the right two lanes for the exit.",
+    "fact": "right two lanes"
+  },
+  {
+    "question": "How much is on my toll pass?",
+    "context": "Toll transponder balance: $12.30.",
+    "fact": "$12.30"
+  },
+  {
+    "question": "What network is the next charger?",
+    "context": "Next charger: Electrify America, 8 stalls, 15 miles.",
+    "fact": "Electrify America"
+  },
+  {
+    "question": "How many stalls does the next charger have?",
+    "context": "Next charger: Electrify America, 8 stalls, 15 miles.",
+    "fact": "8 stalls"
+  },
+  {
+    "question": "Is there a quicker way to go?",
+    "context": "Alternate route saves 6 minutes.",
+    "fact": "6 minutes"
+  },
+  {
+    "question": "When does the ferry leave?",
+    "context": "Next ferry departs at 5:20 PM.",
+    "fact": "5:20 PM"
+  },
+  {
+    "question": "What's the limit in this zone?",
+    "context": "School zone ahead, limit 20 mph.",
+    "fact": "20 mph"
+  },
+  {
+    "question": "What's the clearance on the bridge ahead?",
+    "context": "Bridge clearance ahead: 13 feet 6 inches.",
+    "fact": "13 feet 6 inches"
+  },
+  {
+    "question": "How late is that diner open?",
+    "context": "Nearest diner: Nook Cafe, open until 11 PM.",
+    "fact": "11 PM"
+  },
+  {
+    "question": "How long is the drive-thru line?",
+    "context": "Drive-thru wait at BurgerBarn: about 8 minutes.",
+    "fact": "8 minutes"
+  },
+  {
+    "question": "Is my passenger buckled in?",
+    "context": "Passenger seatbelt: unfastened.",
+    "fact": "unfastened"
+  },
+  {
+    "question": "How warm is it inside the cabin?",
+    "context": "Interior temperature: 24 degrees.",
+    "fact": "24 degrees"
+  },
+  {
+    "question": "How much longer is the defroster on?",
+    "context": "Rear defroster: on for 6 more minutes.",
+    "fact": "6 more minutes"
+  },
+  {
+    "question": "How much further to the destination?",
+    "context": "Remaining distance to destination: 54 miles.",
+    "fact": "54 miles"
+  },
+  {
+    "question": "What time did I set off?",
+    "context": "Trip started 1:05 PM, current time 1:38 PM.",
+    "fact": "1:05 PM"
+  },
+  {
+    "question": "Where's the closest hospital?",
+    "context": "Nearest hospital: Mercy General, 4.2 miles.",
+    "fact": "Mercy General"
+  },
+  {
+    "question": "How's the back right tire?",
+    "context": "Rear right tire pressure: 29 psi.",
+    "fact": "29 psi"
   }
 ]

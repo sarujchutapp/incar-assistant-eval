@@ -7,17 +7,20 @@ each containing:
 - `best_skill.md` — the best skill the optimizer produced (best-on-val)
 - `results.md` — setup, config deltas, test scores, cost, and findings
 
-Test scores are on `valid_unseen` (29 items: 9 chat, 20 command); the headline
-number is **best-on-val**, the skill you would actually deploy.
+Test scores are on `valid_unseen`; the headline number is **best-on-val**, the
+skill you would actually deploy. Test size differs by corpus version — **v1** =
+29 items (9 chat, 20 command); **v2** = 41 items (21 chat, 20 command) — so
+`overall` is **not comparable across corpus versions**.
 
 ## Runs
 
-| date | experiment | gate | chat | command | overall | note |
+| date | experiment | corpus | chat | command | overall | note |
 |---|---|---|---|---|---|---|
-| 2026-07-09 | [micro-gate baseline](2026-07-09_micro-gate-collapse/results.md) | micro | 0.00 ☠️ | 0.50 | 0.345 | chat collapsed |
-| 2026-07-13 | [min-gate + stratified + rebalanced seed](2026-07-13_min-gate-stratified/results.md) | min | 0.556 | 0.30 | **0.379** | collapse fixed, both quadrants alive |
+| 2026-07-09 | [micro-gate baseline](2026-07-09_micro-gate-collapse/results.md) | v1 | 0.00 ☠️ | 0.50 | 0.345 | chat collapsed |
+| 2026-07-13 | [min-gate + stratified + rebalanced seed](2026-07-13_min-gate-stratified/results.md) | v1 | 0.556 | 0.30 | 0.379 | collapse fixed, both quadrants alive |
+| 2026-07-13 pm | [seed format fix + corpus v2 + temp-0](2026-07-13_seed-fix-corpus-v2/results.md) | v2 | 0.810 | 0.600 | 0.707 | **seed fix baseline=0.756; optimizer no gain (overfit −0.05)** |
 
-(chat / command / overall = best-on-val hard accuracy.)
+(chat / command / overall = best-on-val hard accuracy. For the v2 run the **baseline seed (0.756) beat best-on-val (0.707)** — the seed format fix was the real win; SkillOpt added nothing on top.)
 
 ## How to add the next run
 
