@@ -76,12 +76,12 @@ def test_shipped_grounded_corpus_is_grounded_and_contamination_proof() -> None:
     cases = load_chat_cases(_FIXTURES / "chat_grounded.json")
     assert cases  # a grounded corpus ships
     for case in cases:
-        assert case.context  # every grounded case carries context
         if not case.answerable:
-            # unanswerable-by-construction: the context deliberately does NOT
-            # contain the answer (hallucination check), so the grounded invariant
-            # below doesn't apply — success is abstention, tested separately.
+            # unanswerable-by-construction: context is a distractor or absent, so
+            # the grounded invariant below doesn't apply — success is abstention,
+            # tested separately.
             continue
+        assert case.context  # every grounded (answerable) case carries context
         # the answer is derivable from the context ...
         assert score_chat_case(case, case.context).faithful, case.question
         # ... and NOT given away by the question alone (memorization can't help)

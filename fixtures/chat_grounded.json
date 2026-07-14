@@ -563,5 +563,25 @@
     "question": "What is my average fuel economy?",
     "context": "Fuel range: 305 miles remaining.",
     "answerable": false
+  },
+  {
+    "question": "What is the tire pressure?",
+    "answerable": false
+  },
+  {
+    "question": "How many miles until my next service?",
+    "answerable": false
+  },
+  {
+    "question": "What is the outside temperature right now?",
+    "answerable": false
+  },
+  {
+    "question": "What is my average fuel economy this week?",
+    "answerable": false
+  },
+  {
+    "question": "Is my seatbelt sensor working?",
+    "answerable": false
   }
 ]
