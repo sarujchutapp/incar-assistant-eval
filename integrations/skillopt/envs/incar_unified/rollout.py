@@ -17,7 +17,9 @@ from typing import Any
 
 from skillopt.model import chat_target
 
-from incar_eval.schema import schema_text
+from incar_eval.models import ABSTENTION_LABELS
+from incar_eval.safety import expected_mode
+from incar_eval.schema import SCHEMA, schema_text
 
 from .evaluator import evaluate
 
@@ -33,9 +35,24 @@ def _user_content(item: dict[str, Any]) -> str:
 
 
 def _expected(item: dict[str, Any]) -> str:
-    if item["case_type"] == "command":
-        return f'intent={item["expected_intent"]} slots={item.get("expected_slots", {})}'
-    return f'answer must contain: {item["fact"]}'
+    """Human/analyst-readable expectation, mirroring what ``is_success`` checks.
+
+    Command success is NOT just intent+slots: abstention cases must decline to
+    act, ambiguous cases are scored ONLY on ``mode=clarify`` (intent/slots
+    ignored), and clear/defaultable cases also require the stakes-derived mode.
+    Showing only intent+slots (the old behavior) misrepresented ambiguous and
+    abstention cases in the logs.
+    """
+    if item["case_type"] != "command":
+        return f'answer must contain: {item["fact"]}'
+    intent = item["expected_intent"]
+    if intent in ABSTENTION_LABELS:
+        return f'abstain — must NOT act (intent={intent})'
+    ambiguity = item.get("ambiguity", "clear")
+    if ambiguity == "ambiguous":
+        return f'mode=clarify — must clarify, not act (intent/slots not scored; ~{intent})'
+    mode = expected_mode(SCHEMA[intent].stakes, ambiguity).value
+    return f'intent={intent} slots={item.get("expected_slots", {})} mode={mode}'
 
 
 def process_one(item: dict[str, Any], skill_content: str, out_root: str, max_completion_tokens: int = 1024) -> dict[str, Any]:

@@ -151,6 +151,36 @@ mostly wrote rules. Dynamic per-query retrieval few-shot is outside its scope. I
 a model ignores a rule, a seeded example is the cheap test of whether it needs
 demonstrations rather than instructions.
 
+## 10. SkillOpt's real payoff here: it upgraded the *benchmark*
+
+SkillOpt didn't improve the prompt (§1) — but **running it, and reading its saved
+trajectories, surfaced a series of benchmark defects and gaps that inspection
+alone would have missed.** It functioned as a **stress-test / QA harness**:
+
+- **Format bug found** → the seed fix. `answered_not_acted`: correct JSON wrapped
+  in prose was being rejected. Fixing it lifted baseline 0.24 → 0.76.
+- **Misleading logs found & fixed.** The result `reference_text`/`fail_reason`
+  printed `intent+slots` for *every* command — but the scorer checks different
+  things per case type (below). The log helper now shows the true criterion.
+- **Scorer semantics clarified** (resolved two apparent "anomalies"). Command
+  `hard` (success) depends on the case:
+  - `clear`/`defaultable` → intent **and** slots **and** the stakes-derived mode
+    (`confirm` for high-stakes like `send_message`/`call_contact`, else `execute`);
+  - `ambiguous` → **`mode=clarify` only** — intent/slots are *not* scored, so a
+    right-intent-but-executed answer FAILS (`u_6` "call him back"), while a
+    clarify with a *wrong* intent PASSES (the climate `intent="clarify"` case);
+  - abstention (`none`/`out_of_scope`) → must not act.
+  `soft` is always intent+slot F1, computed independently — which is why hard/soft
+  fully diverge on ambiguous cases.
+- **Coverage gaps identified:** chat has no clarify/abstain path (so hallucination
+  is undetectable); commands carry no resolving context (fill-from-context
+  untested).
+- **Corpus grown & split hardened:** chat 44 → 103, seeded representative split.
+
+So the honest answer to *"does SkillOpt help build a benchmark?"* is **yes — as a
+QA harness, not as an optimizer.** The value came from exercising the benchmark at
+scale and reading the outputs, not from the optimized skill.
+
 ## Cost
 
 Whole investigation ≈ **$6.50** of Bedrock spend (three runs). The target (Ollama)
@@ -175,3 +205,11 @@ budget matters.
   scenario needs a context field commands lack (overlaps the read-tool idea).
 - **Scorer strictness.** Decide deliberately whether the chat faithfulness check
   should accept paraphrases (recall vs reproducibility trade-off).
+- **Ambiguous scoring ignores intent (design decision).** For `ambiguous`
+  commands, success = `mode=clarify` regardless of intent — so a model passes by
+  clarifying with a *garbage* intent (the climate `intent="clarify"` case).
+  Decide whether ambiguous cases should *also* require the correct intent.
+- **Chat clarify/abstain path.** Every chat case is answerable from context, so
+  the model is never tested on "I don't have that" — meaning a hallucinated
+  answer to an unanswerable question would pass undetected. Highest-value chat
+  gap (needs abstention cases + an abstention check, not just faithfulness).
