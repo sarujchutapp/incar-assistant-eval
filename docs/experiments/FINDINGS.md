@@ -8,10 +8,22 @@ synthesis.
 
 ## TL;DR
 
+> **⚠️ UPDATE (2026-07-15, run #5): the headline below was measured on a NON-faithful
+> setup and is overturned for the faithful one.** Runs #1–4 used an expert seed, 1 epoch
+> (slow/meta update barely fired), a 60/20/20 split (test=44, inside noise), and a `min`
+> gate — none of which is how the paper runs. Run *faithfully* — **minimal seed, 4 epochs,
+> 2:3:5 split, scalar gate, qwen2.5-t0 target** — SkillOpt **lifts held-out test +0.126
+> (0.45→0.58) with no overfit (test>val), improving both quadrants under the plain scalar
+> gate.** So finding #1 ("added nothing") reflects the crippled setup, not the method; and
+> the `min`-gate (finding #2) was treating a symptom of that setup. Detail:
+> `2026-07-15_faithful-minimal-qwen/`. Open question: whether it also beats the *expert* seed
+> (next condition, `skill_init=initial.md`).
+
 1. **The seed prompt mattered more than the optimizer.** A single format fix to
    the starting prompt moved baseline overall **0.24 → 0.76**; SkillOpt then
    added **nothing** on top (and slightly overfit). Prompt engineering beat
-   text-space optimization on this setup.
+   text-space optimization on this setup. *(Setup-specific — see UPDATE above: from a
+   minimal seed under the faithful setup, SkillOpt does add +0.126 on test.)*
 2. **Aggregate scores hide mode collapse.** A flat "overall" concealed chat
    cratering 0.78 → 0.00 while command rose. Per-quadrant reporting + a
    min-of-quadrants gate were needed to see and stop it.

@@ -24,10 +24,12 @@ model_list:
 litellm_settings:
   # THE HARD CAP. When cumulative spend crosses this, calls return a
   # BudgetExceededError *before* Bedrock is billed further.
-  # START AT 1 to PROVE the cap fires, then raise. (Confirm the key name against
-  # your LiteLLM version — `litellm --version`; global-budget syntax has moved.)
-  max_budget: 1            # USD
-  budget_duration: 30d     # window the cap resets over
+  # In-memory global budget: metered over the PROXY PROCESS lifetime (= one run),
+  # so it needs NO database. Restart the proxy = spend counter resets to 0.
+  # NOTE: `budget_duration` (a resettable window) is DB-only — adding it back
+  # requires a connected Postgres (DATABASE_URL), which is why the proxy returned
+  # "No connected db". Left out on purpose for the no-DB path.
+  max_budget: 0.001            # USD — proven at a tiny value first (see below), then set to 5
 
 general_settings:
   master_key: sk-litellm-CHANGEME   # set your own; this is the api_key SkillOpt sends to the proxy

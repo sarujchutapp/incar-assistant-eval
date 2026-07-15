@@ -2,8 +2,10 @@
 
 Pools the command corpus (cases + hard_cases + synth_cases, tagged
 case_type="command") with the grounded chat corpus (chat_grounded, tagged
-case_type="chat"), then stratifies ~60/20/20 by a routing-aware key so every
-split holds both commands (across ambiguity/abstention) and chat.
+case_type="chat"), then stratifies 2:3:5 (train/val/test) by a routing-aware key
+so every split holds both commands (across ambiguity/abstention) and chat. The
+generous val/test (vs a large-corpus 2:1:7) follows the paper's bounded-pool
+shape (cf. ALFWorld 39 train / 140 selection / 134 test) for a small corpus.
 
 Run from the SkillOpt repo root:
 
@@ -67,8 +69,8 @@ def main() -> None:
     for key in sorted(groups):
         g = groups[key]
         rng.shuffle(g)  # representative split, not authoring-order; seeded for reproducibility
-        n_val = round(len(g) * 0.2)
-        n_test = round(len(g) * 0.2)
+        n_val = round(len(g) * 0.3)
+        n_test = round(len(g) * 0.5)
         val += g[:n_val]
         test += g[n_val:n_val + n_test]
         train += g[n_val + n_test:]

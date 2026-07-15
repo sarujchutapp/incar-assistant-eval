@@ -19,7 +19,7 @@ model:
   rewrite_max_completion_tokens: 4096   # cap optimizer rewrite output (base default is 64000 = ~$1/call on Sonnet)
 
 train:
-  num_epochs: 1        # keep the first capped run TINY
+  num_epochs: 4        # paper-faithful; slow/meta update fires at epoch boundaries
   train_size: 0
   batch_size: 20
   accumulation: 1
@@ -36,15 +36,15 @@ evaluation:
   use_gate: true
   gate_metric: mixed
   gate_mixed_weight: 0.5
-  gate_aggregation: min   # gate on the WORST case_type, not the pooled avg — so a
-                          # candidate can't trade chat away to boost command
+  gate_aggregation: micro   # paper-faithful scalar gate (pooled per-item avg);
+                            # per-quadrant breakdown kept for reporting only
   sel_env_num: 0
   test_env_num: 0
   eval_test: true
 
 env:
   name: incar_unified
-  skill_init: skillopt/envs/incar_unified/skills/initial.md
+  skill_init: skillopt/envs/incar_unified/skills/minimal.md   # faithful no-skill→optimized run; swap to initial.md for the harder expert-seed condition
   split_mode: split_dir
   split_dir: data/incar_unified_split
   data_path: ""
