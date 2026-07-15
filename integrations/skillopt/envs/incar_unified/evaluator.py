@@ -21,6 +21,8 @@ from typing import Any
 from incar_eval.adapter import parse_tool_call
 from incar_eval.chat import ChatCase, score_chat_case
 from incar_eval.loader import _to_gold
+from incar_eval.models import ABSTENTION_LABELS, ResponseMode
+from incar_eval.safety import is_hard_block
 from incar_eval.scorer import score_case
 
 
@@ -37,11 +39,27 @@ def evaluate(item: dict[str, Any], raw: str) -> dict[str, Any]:
     if item["case_type"] == "command":
         if tool is None:  # answered instead of acting
             return {"id": item["id"], "hard": 0.0, "soft": 0.0, "response": raw, "fail_reason": "answered_not_acted"}
-        outcome = score_case(_to_gold(item), tool)
+        gold = _to_gold(item)
+        outcome = score_case(gold, tool)
+        # soft = partial credit toward the SAME objective as hard. On cases where
+        # acting is itself the failure (ambiguous -> clarify, blocked-while-moving
+        # -> warn, abstention -> don't act), a response that acts scores soft 0 —
+        # otherwise "right domain, wrong action" (e.g. u_6 executing on an
+        # ambiguous command) earns 0.5 and misleads the gate toward accepting it.
+        acted = (
+            tool.mode not in (ResponseMode.CLARIFY, ResponseMode.WARN_ALTERNATIVE)
+            and tool.intent not in ABSTENTION_LABELS
+        )
+        should_not_act = (
+            gold.ambiguity == "ambiguous"
+            or is_hard_block(gold)
+            or gold.expected_intent in ABSTENTION_LABELS
+        )
+        soft = 0.0 if (acted and should_not_act) else 0.5 * float(outcome.intent_ok) + 0.5 * outcome.slot_f1
         return {
             "id": item["id"],
             "hard": 1.0 if outcome.success else 0.0,
-            "soft": 0.5 * float(outcome.intent_ok) + 0.5 * outcome.slot_f1,
+            "soft": soft,
             "response": raw, "case_type": "command", "routing": outcome.routing.value,
         }
     # chat

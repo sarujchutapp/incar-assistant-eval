@@ -75,6 +75,16 @@ can't see a val→test drop; only a larger val set narrows it. Note the collapse
 direction is not fixed: v1 sacrificed chat, v3 sacrificed command — whichever
 quadrant the current emphasis pulls away from.
 
+*Second caveat: `soft` (half the `mixed` gate) lied on the non-acting cases.* The
+command `soft = 0.5·intent + 0.5·slot_f1` ignores mode, so a response that **acts
+on an ambiguous command** (u_6 "call him back" → executes with `name:"him"`) earned
+soft **0.5** — half credit for exactly the unsafe behavior hard scores 0. The
+nominal 0.5 mixed-weight was therefore *not* a clean 50/50 toward success; on
+ambiguous/blocked cases soft measured an orthogonal axis and propped up the gate
+for wrong answers. Fixed: soft is now 0 when the model acts on a should-not-act
+case (ambiguous → clarify, blocked-while-moving → warn, abstention → don't act);
+abstention already scored ~0 via intent/f1. Clear/defaultable soft is unchanged.
+
 ## 4. Generalization: val, test, best, and final are four different things
 
 - **best-on-val ≠ best-on-test.** The optimizer maximizes a *validation* score;
