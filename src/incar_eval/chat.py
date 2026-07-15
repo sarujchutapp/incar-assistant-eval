@@ -107,6 +107,9 @@ _ABSTAIN_MARKERS = (
     "do not know", "not sure", "can't tell", "cant tell", "cannot tell",
     "can't answer", "cannot answer", "no information", "not available",
     "don't see", "dont see", "no data", "unable to", "i don't have",
+    # weak targets often abstain by calling the value unknown rather than saying
+    # "I don't have it" — count those as declines too (not fabricating a value)
+    "unknown", "unclear", "not clear", "can't determine", "cannot determine",
 )
 
 

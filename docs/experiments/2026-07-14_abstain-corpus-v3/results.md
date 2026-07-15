@@ -62,18 +62,45 @@ the very first run's chat collapse.
 5. **Abstain cases too few in test (3) to measure.** baseline 2/3 → best 1/3,
    flipped both directions = noise. Mechanically correct; needs more cases to read.
 
+## Isolation: v2 seed as control (what actually caused the drop)
+
+To attribute the 0.756→0.591 fall, we re-ran the **v2 seed** (run #3's, no abstain
+rule) on the v3 test split via the local target (no Bedrock), and re-scored the
+command track under both the old and new `is_success` rule. The two benchmark
+changes are independent — scoring touches only command, corpus only chat — so
+attribution is clean:
+
+| factor (v2 seed held fixed) | measured effect |
+|---|---|
+| **hard-scoring change** (ambiguous → clarify **+** correct intent) | **0** — command 12/20 under *both* rules, **0 cases flipped** (no model ever clarified with a wrong intent) |
+| **corpus change** (+3 abstain cases in test) | **−3 items** (v2 seed scores 0/3 raw, ≈ −0.03 overall) |
+| **seed change** (v2 → v4 seed, same corpus) | **−0.136** (0.727 → 0.591): the abstain rule refused 7 answerable questions |
+
+**v2 seed on v3 test = 0.727** (chat answerable **20/21**, abstain 0/3, command
+12/20) vs the v4 seed's 0.591. So **~80% of the drop was the seed I added**, not
+the benchmark changes. The scoring change is a correct-but-inert loophole close;
+the corpus change costs only −0.03.
+
+**Bonus defect found:** 2 of the v2 seed's 3 abstain "failures" were actually
+abstentions the detector missed — *"the weather is unknown"*, *"the traffic is
+unclear"*. `_abstains` didn't list `unknown`/`unclear`. Widened it (only the
+fabricated *"68 mph"* still fails), so the v2 seed's true abstain is **2/3** and
+its corrected overall is **~0.773**.
+
 ## Honest conclusion
 
-Third confirmation of the v2 verdict: on this setup (good seed + weak `llama3`
-target + ~44-item val) **SkillOpt overfits val and hurts test every time** — v1 it
-sacrificed chat, here it sacrificed command. **Deploy the seed (0.591).** The
-benchmark got better (hallucination coverage, stricter ambiguous scoring); the
-optimizer still added nothing. The one lever that could flip the verdict remains a
-**stronger target** with real command-format headroom.
+The run only *looked* worse; the diagnosis is the opposite of alarming. **The
+initial seed was the whole story** — a one-sided abstain rule made the weak target
+over-refuse (−0.136), while the two benchmark changes were near-free (scoring
+inert, corpus −0.03). Reverted the seed to v2 (the confirmed-best artifact,
+0.727 / ~0.773 with the detector fix) and kept both benchmark changes. And, third
+time confirmed: on this setup (good seed + weak target + small val) **SkillOpt
+overfits val and hurts test** — v1 it sacrificed chat, here command. The one lever
+that could flip the verdict remains a **stronger target**.
 
 ## Not comparable to v1/v2
 
-Corpus v3 (test 44, chat 24 incl. 15 abstain corpus-wide) — chat baselines reset
-downward, but mostly from the seed abstain rule inducing over-abstention on
-*answerable* questions (finding 3), not from the abstain cases. Command track (20)
-is unchanged from v2 (baseline 11/20 both).
+Corpus v3 (test 44, chat 24 incl. 15 abstain corpus-wide). Command track (20) is
+unchanged from v2 (baseline 11/20). Chat baselines look lower, but the isolation
+above shows that's almost entirely the (now-reverted) seed abstain rule, not the
+corpus.

@@ -56,6 +56,16 @@ def test_unanswerable_case_passes_when_model_abstains() -> None:
     assert score_chat_case(case, "Sorry, that's not available to me.").success
 
 
+def test_unanswerable_case_accepts_unknown_unclear_as_abstention() -> None:
+    # weak models often decline by calling the value unknown/unclear rather than
+    # saying "I don't have it" — those still count as (correct) abstention
+    case = ChatCase("how fast am I going?", context="Route: 20 minutes.", answerable=False)
+    assert score_chat_case(case, "Your speed is unknown.").success
+    assert score_chat_case(case, "The traffic is unclear.").success
+    # but a fabricated concrete value is still a hallucination
+    assert not score_chat_case(case, "You're going 68 mph.").success
+
+
 def test_unanswerable_case_fails_when_model_hallucinates() -> None:
     # answering anyway (any confident number) is a hallucination -> failure
     case = ChatCase("what's the tire pressure?", context="Fuel range: 210 miles.", answerable=False)
