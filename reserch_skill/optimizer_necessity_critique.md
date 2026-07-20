@@ -35,9 +35,17 @@ _Last updated: 2026-07-17._
 
 - **#7 seed-blindness** is correct and it reframes the whole debate. The seed *is* written blind to failures, so the real axis is not *optimize vs. don't* but **automated loop vs. manual loop**. A human *can* close the loop by hand — read failures, revise, re-test — and at a small, human-tractable corpus (~70–400 cases) the manual loop is not only feasible but often *better* (judgment, taste, catching verifier-gaming). Automation only wins when the loop is too big to run by hand.
 - **#8 the untested regime** — confirmed against the paper. SkillOpt is always seeded from a *generic* skill (the paper describes initial skills as "a one-liner or a paragraph"; the ALFWorld seed as "a generic household plan"). The expert **human skill is a separate standalone baseline, never SkillOpt's starting point.** So the paper shows *generic-seed→optimized* beats *human-skill-standalone*, but **never** *good-seed→optimized* vs *good-seed-as-is*. The claim the critique hinges on is an **unmet burden of proof**, not a settled win.
-- **What the "expert" baseline actually is** — the paper defines `human skill` only as *"an expert-written skill document curated per benchmark,"* and notes human skills run **145–516 tokens**. No detail on who authored them, the effort, or whether any authoring methodology (à la Matt Pocock) was used. So "SkillOpt beats the expert skill" is weaker than it sounds: the baseline may be a *modest, short* expert draft, and it was never used as a seed. Beating it ≠ beating a best-effort hand-authored prompt.
+- **What the "expert" baseline actually is** — the paper defines `human skill` only as *"an expert-written skill document curated per benchmark"* (§4, Baselines), and separately notes *"human skills are already 145–516 tokens long ... yet they are beaten in every direct-chat model row while the learned artifacts remain compact (Table 6)"* (§4.2). No detail on who authored them, the effort, or whether any authoring methodology (à la Matt Pocock) was used. So "SkillOpt beats the expert skill" is weaker than it sounds: the baseline may be a *modest, short* expert draft, and it was never used as a seed. Beating it ≠ beating a best-effort hand-authored prompt.
+- **Finding: it out-*lengths* the human skill to beat it.** Cross-referencing Table 6 (§4.4) against the human-skill range (§4.2):
+
+  | | Tokens |
+  | --- | --- |
+  | Human "expert" skill (beaten) | **145–516** |
+  | SkillOpt final skill | **379–1,995** (median ≈ 920): SearchQA 857, SpreadsheetBench 1,995, OfficeQA 883, DocVQA 959, LiveMath 379, ALFWorld 1,321 |
+
+  SkillOpt's deployed skill is typically **~2–4× the length** of the expert baseline it beats (e.g. SpreadsheetBench 1,995 vs ≤516; DocVQA 959 vs ≤516). So a real part of the "win" is just **being more comprehensive** — more procedural rules, more tokens — than a short human draft. The paper hedges this as *"not simply prompt length"* (§4.2), but *"not simply length"* ≠ *"not length at all."* **Credibility consequence:** if SkillOpt wins largely by covering rules a 145–516-token draft omitted, then the "expert-written" label is doing heavy lifting for a **short, possibly strawman baseline** — and the fair comparison (a longer, best-effort, failure-annotated hand-authored skill) was never run. This *undercuts* the "beats expert" headline, not just the "optimizes-a-good-seed" one.
 - **#11 few-shot on SLMs** — correct. In-context learning reliability scales with model size (the "emergent" framing was contested by Schaeffer 2023, but the *empirical* weakness holds). Demos help SLMs mainly for **format/pattern imitation**, less for abstract induction, and they **compete with the instruction for scarce context**. Testable consequence: on an SLM, instruction-only optimizers (GEPA/COPRO/SkillOpt) should beat demo-heavy ones (Bootstrap/MIPROv2) — a mark against the DSPy demo machinery for our case.
-- **#5 marginal + collateral risk** — real near ceiling; the SLM regression data (TextGrad/human skills *hurting* Qwen3.5-4B) shows optimization can degrade other properties.
+- **#5 marginal + collateral risk** — real near ceiling; the SLM regression data shows optimization can degrade other properties. Concretely (Table 1, **Qwen3.5-4B** row, deltas vs no-skill): TextGrad **−7.4** on SearchQA, **−11.8** on LiveMath, **−1.3** on DocVQA; the hand-written human skill **−1.8** SearchQA, **−4.0** LiveMath, **−2.2** ALFWorld. Only the gated SkillOpt stays positive on all six — evidence that ungated/naïve optimization *hurts* a small model.
 - **#9 use cases**, for *our* setting:
   - *Reproducibility/fairness* — largely conceded: a **fixed shared human prompt across models** is also reproducible and fair. Surviving nuance only: "same prompt for all" vs "each model's best prompt" are two legitimate eval philosophies; optimization serves the second. Not decisive.
   - *Drift* — conceded for a single product.
@@ -52,11 +60,11 @@ _Last updated: 2026-07-17._
 
 ## What the paper's own run actually was
 
-From the default-hyperparameters section (grounding the "did they just run 4 epochs and beat the expert?" question):
+From the "Default optimizer hyperparameters" text (§4) and Table 6 (§4.4), grounding the "did they just run 4 epochs and beat the expert?" question:
 
 - **4 epochs** (default, "unless noted"), rollout batch 40/step, reflection minibatch 8 (16 parallel analyst workers), textual LR = 4 with cosine decay, held-out validation gate (strictly-greater; ties rejected), slow/meta update over 20 sampled tasks/epoch. Both teacher (optimizer) and student (target) default to **medium reasoning effort**.
-- **Edit economy: gains come from only 1–4 *accepted* edits** committed to `best_skill.md`. So it's a generic seed + 4 epochs + a handful of accepted edits that beats the (short, unknown-rigor) standalone expert baseline.
-- **Not verified from the extract:** whether every optimizer baseline (TextGrad, GEPA, EvoSkill…) started from the *same* initial seed, and whether rollout/optimizer **budgets were matched** across methods. The main text only claims it "isolates the adaptation procedure rather than secondary factors such as prompt template"; the actual seed-sharing and budget-parity protocol is deferred to **Appendix C**, which isn't in our local extract. This is a fairness question worth checking before citing the 52/52 result as apples-to-apples.
+- **Edit economy: gains come from only 1–4 *accepted* edits** committed to `best_skill.md` (Table 6, GPT-5.5→GPT-5.5 runs): SearchQA 4, SpreadsheetBench 4, OfficeQA 1, DocVQA 3, LiveMath 1, ALFWorld 2 — *"between 1 and 4 (median 2.5)."* Verbatim: *"LiveMath's +29.3 point gain over no skill arises from a **single** accepted edit, and OfficeQA's +39.0 point gain similarly arises from one accepted edit"* (§4.4). Caveat on interpreting this: an "edit" is a bounded **rule-block**, not a word — the seeds are near-empty (SearchQA **16 tokens**, DocVQA 81, OfficeQA 145) and each edit adds hundreds of tokens, so "1 edit" ≈ "one accepted paragraph of rules," gated on held-out gain.
+- **Not verified from the extract:** whether every optimizer baseline (TextGrad, GEPA, EvoSkill…) started from the *same* initial seed, and whether rollout/optimizer **budgets were matched** across methods. The main text only claims it *"isolates ... the choice of adaptation procedure rather than secondary factors such as prompt template or scoring pipeline"* (§4, Baselines) — which addresses procedure, **not** equal starting skills or equal token budgets. A targeted fetch of the arXiv HTML (incl. appendices) did **not** surface an explicit seed-sharing / budget-parity statement, so this remains **open** — a fairness question before citing the 52/52 result as apples-to-apples.
 
 ## Landing position
 
@@ -80,6 +88,25 @@ On our in-car SLM task, compare:
 - If **(ii) ≫ (i)** and **(ii) ≫ (iv)** → automated optimization earns its complexity even on a good seed (the critique fails).
 
 No published paper reports this four-cell design. It settles the argument empirically for our regime.
+
+## Key numbers & quotes (arXiv 2605.23904v2, verify against local `paper_extract.txt`)
+
+| Claim | Number / quote | Where |
+| --- | --- | --- |
+| Baselines | 7: no-skill, human-skill, one-shot-LLM, Trace2Skill, TextGrad, GEPA, EvoSkill | §4, Baselines |
+| "no-skill" is not blank | *"the frozen target model run with the benchmark's default system prompt"* | §4, Baselines |
+| Comparability claim | *"isolates ... the choice of adaptation procedure rather than secondary factors such as prompt template or scoring pipeline"* | §4, Baselines |
+| Main result | best or tied on **52/52** (model, benchmark, harness) cells | §4.1, Table 1 |
+| Human-skill length | **145–516 tokens** | §4.2 |
+| Human-skill definition | *"an expert-written skill document curated per benchmark"* | §4, Baselines |
+| SkillOpt final length | 379–1,995 tok, median ≈ 920 | §4.4, Table 6 |
+| SkillOpt seed length | 16–516 tok (SearchQA 16) | §4.4, Table 6 |
+| Accepted edits | 1–4, median 2.5 (OfficeQA/LiveMath = **1**) | §4.4, Table 6 |
+| Single-edit gains | LiveMath **+29.3** and OfficeQA **+39.0** over no-skill each from **one** edit | §4.4 |
+| SLM regression | Qwen3.5-4B: TextGrad −7.4 SearchQA / −11.8 LiveMath; human −1.8 / −4.0 / −2.2 | §4.1, Table 1 |
+| Run config | 4 epochs, batch 40, minibatch 8, LR=4 cosine, medium reasoning (teacher+student) | §4, hyperparameters |
+| Optimizer strength | strong optimizer > target-matched; latter recovers **56–74%** of the gain | §4.3, Table 5 |
+| Seed/budget parity across baselines | **not stated** in main text; deferred to Appendix C (unverified) | §4 → App. C |
 
 ## Related
 
