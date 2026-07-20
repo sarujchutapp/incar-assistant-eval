@@ -77,4 +77,4 @@ This grouping maps onto the external-vs-internal-state framing (see `slm_agent_r
 - GEPA + DSPy + Ollama tutorial (local SLMs) — https://dspy.ai/tutorials/gepa_ai_program/
 - GEPA paper — arXiv 2507.19457
 - Standalone engine — `gepa-ai/gepa`
-- Companion: `reserch/slm_agent_research_directions.md`
+- Companion: `slm_agent_research_directions.md` (same folder)
