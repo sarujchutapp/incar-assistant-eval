@@ -1,6 +1,3 @@
-# Claude Code local overrides (machine-specific; settings.json is shared)
-.claude/settings.local.json
-
 # Scratch / temporary working files
 .scratch/
 
