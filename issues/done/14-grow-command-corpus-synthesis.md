@@ -29,7 +29,7 @@ The command/control corpus is ~67 cases across `fixtures/{cases,hard_cases,synth
 
 ## Conventions & rules (MUST follow)
 
-See `reserch/corpus_design.md`, `reserch/standards_alignment.md`, `reserch/benchmark_spec.md` §5.1/§6.1/§11.
+See `research/corpus_design.md`, `research/standards_alignment.md`, `research/benchmark_spec.md` §5.1/§6.1/§11.
 
 1. **Different family than the target.** Target = llama3; synthesize with a *different* family (Claude, etc.). Scripted `synth.py` needs `ANTHROPIC_API_KEY` + `pip install anthropic`; alternatively generate with any non-llama chat model and run drafts through `incar_eval.synth.filter_candidates` before appending to the queue.
 2. **Human-verify; no pure templating.** Every promoted case is human-reviewed; reject templated / near-duplicate variants.

@@ -4,7 +4,7 @@ Status: done
 
 ## Parent
 
-PRD #1 · roadmap item #2 (`reserch/roadmap.md`)
+PRD #1 · roadmap item #2 (`research/roadmap.md`)
 
 **GitLab:** #11
 

@@ -23,7 +23,7 @@ unknown slot, or a bad ambiguity label raises immediately.
 every `expected_intent`/`expected_slots` by hand, collect tool-call proposals from
 ≥2 different-family models, run them through `incar_eval.verify.verify_batch`, and
 only hand-check the flagged remainder (disagreements + safety/ambiguous/out_of_scope
-cells). See `reserch/hitl_handling_decision.md`.
+cells). See `research/hitl_handling_decision.md`.
 
 ## 2. Record model responses — `responses.json`
 
@@ -64,4 +64,4 @@ python -m incar_eval.cli --cases examples/cases.example.json --responses example
 - The **safety / ambiguous / out_of_scope** cells (hand-authored; auto-verification
   always flags these).
 - The **slice-8 human-satisfaction anchor** — a one-time ~50–100 case pass. This
-  stays human on purpose; see `reserch/hitl_handling_decision.md`.
+  stays human on purpose; see `research/hitl_handling_decision.md`.

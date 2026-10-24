@@ -4,7 +4,7 @@ Status: wontfix
 
 ## Parent
 
-PRD #1 · roadmap item #7 (`reserch/roadmap.md`)
+PRD #1 · roadmap item #7 (`research/roadmap.md`)
 
 **GitLab:** #14
 

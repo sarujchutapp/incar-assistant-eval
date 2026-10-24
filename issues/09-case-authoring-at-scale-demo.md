@@ -21,7 +21,7 @@ Author the real dataset at scale and produce the demonstration. Generate ~400 co
 
 ## Blocked by
 
-- [04-context-cases-carstate-jga.md](./04-context-cases-carstate-jga.md)
+- [04-context-cases-carstate-jga.md](./done/04-context-cases-carstate-jga.md)
 
 ## Comments
 
@@ -52,7 +52,7 @@ is now built (`src/incar_eval/verify.py`, `tests/test_verify.py`):
 **52 verified command/control cases** authored via the subagent synth→verify loop
 (target ~400, §5.1); flagged queue currently **empty**. Conventions adopted along
 the way (SGD/MultiWOZ slot matching, range-relative intensity, value
-canonicalization) — see `reserch/standards_alignment.md` + `schema_clarifications.md`.
+canonicalization) — see `research/standards_alignment.md` + `schema_clarifications.md`.
 Remaining: keep running the loop to ~400 (mostly AFK + light human spot-check),
 then the multi-tier **demonstration run** once the unified scorecard (11 / #12) and
-real-model wiring (12 / #13) land. Roadmap: `reserch/roadmap.md`.
+real-model wiring (12 / #13) land. Roadmap: `research/roadmap.md`.

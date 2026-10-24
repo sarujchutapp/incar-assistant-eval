@@ -29,7 +29,7 @@ Verifiable cases become **grounded triples**: `question` + `context` + `answer`,
 
 ## Conventions & rules (MUST follow)
 
-See `reserch/corpus_design.md`, `reserch/benchmark_spec.md`, `reserch/standards_alignment.md`.
+See `research/corpus_design.md`, `research/benchmark_spec.md`, `research/standards_alignment.md`.
 
 1. **No public-corpus import.** Author fresh (frozen decision — importing public data re-imports contamination). KVRET/SMD may inform *what questions look like*; no data imported.
 2. **Grounding = contamination defense.** Every verifiable case's `answer` must be derivable **only** from its `context`; author context with fresh/novel values so nothing is answerable from memory.
@@ -62,7 +62,7 @@ None. Depends only on the existing chat quadrant + the `ModelClient` port. Scrip
 
 ### Done — 2026-07-08
 
-Built with `/tdd` (vertical slices). 8 new tests; suite 131 → 139, mypy clean (36 → 38 files).
+Built test-first (vertical slices). 8 new tests; suite 131 → 139, mypy clean (36 → 38 files).
 
 **1. Context grounding (`chat.py`, `loader.py`)**
 - `ChatCase` gains `context: str = ""` (default keeps the existing closed-book seed
