@@ -11,7 +11,7 @@ ambiguous / none / out_of_scope) rather than over-representing one type.
 
 Run from the SkillOpt repo root:
 
-    python build_splits.py --fixtures ../ai-evaluation/fixtures --out data/incar_toolcalling_split
+    python build_splits.py --fixtures ../incar-assistant-eval/fixtures --out data/incar_toolcalling_split
 """
 
 from __future__ import annotations
@@ -67,7 +67,7 @@ def _breakdown(items: list[dict]) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--fixtures", required=True, help="Path to the ai-evaluation/fixtures dir")
+    ap.add_argument("--fixtures", required=True, help="Path to the incar-assistant-eval/fixtures dir")
     ap.add_argument("--out", default="data/incar_toolcalling_split")
     args = ap.parse_args()
 

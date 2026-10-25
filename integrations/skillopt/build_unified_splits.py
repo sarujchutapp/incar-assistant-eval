@@ -9,7 +9,7 @@ shape (cf. ALFWorld 39 train / 140 selection / 134 test) for a small corpus.
 
 Run from the SkillOpt repo root:
 
-    python build_unified_splits.py --fixtures ../ai-evaluation/fixtures --out data/incar_unified_split
+    python build_unified_splits.py --fixtures ../incar-assistant-eval/fixtures --out data/incar_unified_split
 """
 
 from __future__ import annotations

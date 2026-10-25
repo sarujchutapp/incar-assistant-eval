@@ -6,7 +6,7 @@ until it grows — treat results as plumbing checks, not measurements.
 
 Run from the SkillOpt repo root:
 
-    python build_chat_splits.py --fixtures ../ai-evaluation/fixtures --out data/incar_chat_split
+    python build_chat_splits.py --fixtures ../incar-assistant-eval/fixtures --out data/incar_chat_split
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ def _write(items: list[dict], out_dir: str) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--fixtures", required=True, help="Path to the ai-evaluation/fixtures dir")
+    ap.add_argument("--fixtures", required=True, help="Path to the incar-assistant-eval/fixtures dir")
     ap.add_argument("--out", default="data/incar_chat_split")
     args = ap.parse_args()
 

@@ -92,7 +92,7 @@ need it.
 | `src/incar_eval/` | The benchmark: schema and loader, scorer and metrics, safety model, statistics, LLM judge, auto-verification, corpus synthesis, scorecard |
 | `fixtures/`, `examples/` | Test cases and recorded model responses |
 | `tests/` | Offline test suite |
-| `integrations/skillopt/` | Adapter for running Microsoft's SkillOpt prompt optimizer against this benchmark — analysis in [skillopt](https://github.com/sarujchutapp/skillopt) |
+| `integrations/skillopt/` | Adapter for running Microsoft's SkillOpt prompt optimizer against this benchmark — analysis in [skillopt-deep-dive](https://github.com/sarujchutapp/skillopt-deep-dive) |
 | `research/` | Benchmark spec, evaluation-landscape survey, corpus design, standards alignment, roadmap |
 | `docs/runbook.md` | How to author cases and run the benchmark |
 | `issues/` | The implementation plan as vertical slices (`done/` for completed) |

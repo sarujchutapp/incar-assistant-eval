@@ -50,12 +50,12 @@ with the matching `--config configs/<env>/default.yaml`.
 ```bash
 git clone https://github.com/microsoft/SkillOpt && cd SkillOpt
 pip install -e .                                # SkillOpt
-pip install -e /path/to/ai-evaluation          # makes `incar_eval` importable
+pip install -e /path/to/incar-assistant-eval          # makes `incar_eval` importable
 
 # 1. Drop this env into SkillOpt's package tree
-cp -r /path/to/ai-evaluation/integrations/skillopt/envs/incar_toolcalling skillopt/envs/
+cp -r /path/to/incar-assistant-eval/integrations/skillopt/envs/incar_toolcalling skillopt/envs/
 mkdir -p configs/incar_toolcalling
-cp /path/to/ai-evaluation/integrations/skillopt/config/default.yaml configs/incar_toolcalling/default.yaml
+cp /path/to/incar-assistant-eval/integrations/skillopt/config/default.yaml configs/incar_toolcalling/default.yaml
 
 # 2. Register the env — add this block inside _register_builtins() in scripts/train.py:
 #    (SkillOpt has no auto-discovery; the registry is an explicit dict.)
@@ -67,8 +67,8 @@ cp /path/to/ai-evaluation/integrations/skillopt/config/default.yaml configs/inca
 #        pass
 
 # 3. Build the splits from the fixtures
-python /path/to/ai-evaluation/integrations/skillopt/build_splits.py \
-    --fixtures /path/to/ai-evaluation/fixtures --out data/incar_toolcalling_split
+python /path/to/incar-assistant-eval/integrations/skillopt/build_splits.py \
+    --fixtures /path/to/incar-assistant-eval/fixtures --out data/incar_toolcalling_split
 
 # 4. Run (models + key are set in the config; ANTHROPIC_API_KEY must be exported)
 export ANTHROPIC_API_KEY=sk-...
