@@ -6,7 +6,7 @@ structured tool call it emits — not what it claims to have done, weighs errors
 dangerous they are to the driver, and reports every number with a confidence interval so
 real differences can be told apart from noise.
 
-> Built during my Data Scientist internship at **Toyota Tsusho Mobility Informatics Pte. Ltd.**
+> Built during my data science internship
 > (Jun–Jul 2026). I designed the benchmark from a survey of current evaluation practice and
 > implemented it end to end.
 
